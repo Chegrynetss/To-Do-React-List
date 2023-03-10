@@ -3,7 +3,7 @@ const TodoItem = ({todo, onToggle, onEdit, onRemove}) => {
     onToggle(todo.id)
 }
   const handleEdit = () => {
-    onEdit(todo.id)
+    onEdit(todo)
 }
   const handleRemove = () => {
       onRemove(todo.id)
