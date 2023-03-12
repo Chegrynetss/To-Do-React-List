@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
-import AddTodo from './AddTodo.jsx'
-import EditTodo from './EditTodo.jsx'
-import TodoItem from './TodoItem.jsx'
-import { TODO_STATUS } from './TodoStatus.ts'
+import AddTodo from './AddTodo'
+import EditTodo from './EditTodo'
+import TodoItem from './TodoItem'
+import { TODO_STATUS } from './Todos.constants'
+import './Todos.styles.css'
+import TodosConditions from './TodosConditions'
 
 function Todos() {
   const [todos, setTodos] = useState([])
@@ -27,10 +29,6 @@ function Todos() {
     setEditing(null)
   }
 
-  function handleCancel() {
-    setEditing(null)
-  }
-
   const handleToggle = (id) => {
     const updatedTodos = todos.map((todo) => {
       if (todo.id === id) {
@@ -44,30 +42,26 @@ function Todos() {
     setTodos(updatedTodos)
   }
 
-  const handleStatusChange = (e) => {
-    setStatus(e.target.value)
-  }
-
   const visibleTodos = todos.filter((todo) => {
+    if (status === TODO_STATUS.ALL) {
+      return true
+    }
+    if (status === TODO_STATUS.ACTIVE) {
+      return !todo.completed
+    }
     if (status === TODO_STATUS.COMPLETED) {
       return todo.completed
-    } else {
-      return !todo.completed
     }
   })
 
   return (
     <div>
       <h1> ToDo List </h1>
-      <label>
-        <select onChange={handleStatusChange}>
-          <option value={TODO_STATUS.ALL}> All Items </option>
-          <option value={TODO_STATUS.COMPLETED}> Completed </option>
-        </select>
-      </label>
+      <TodosConditions value={status} onChange={setStatus} />
       <ul>
         {visibleTodos.map((todo) => (
           <TodoItem
+            key={todo.id}
             todo={todo}
             onEdit={handleEdit}
             onRemove={handleRemove}

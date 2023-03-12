@@ -15,12 +15,12 @@ function AddTodo({ onAdd }) {
   return (
     <form onSubmit={handleSubmit}>
       <input
+        className="inputForm"
         type="text"
         placeholder="Add a new Todo"
         value={text}
         onChange={(e) => setText(e.target.value)}
       />
-      <button type="submit">Add</button>
     </form>
   )
 }

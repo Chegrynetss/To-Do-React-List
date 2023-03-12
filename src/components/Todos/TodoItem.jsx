@@ -1,12 +1,14 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-const TodoItem = ({ todo, onToggle, onEdit, onRemove }) => {
+const TodoItem = ({ todo, onToggle, onRemove }) => {
+  const [isEditing, setIsEditing] = useState(false)
+
   const handleToggle = () => {
     onToggle(todo.id)
   }
 
   const handleEdit = () => {
-    onEdit(todo)
+    setIsEditing(true)
   }
 
   const handleRemove = () => {
@@ -14,7 +16,7 @@ const TodoItem = ({ todo, onToggle, onEdit, onRemove }) => {
   }
 
   return (
-    <ul key={todo}>
+    <li>
       <input type="checkbox" checked={todo.completed} onChange={handleToggle} />
       <span
         style={{ textDecoration: todo.completed ? 'line-through' : 'none' }}
@@ -29,7 +31,7 @@ const TodoItem = ({ todo, onToggle, onEdit, onRemove }) => {
         {' '}
         Edit{' '}
       </button>
-    </ul>
+    </li>
   )
 }
 
