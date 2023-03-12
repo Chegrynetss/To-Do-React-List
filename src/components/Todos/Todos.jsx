@@ -1,63 +1,51 @@
 import React, { useState } from 'react'
 import AddTodo from './AddTodo'
-import EditTodo from './EditTodo'
 import TodoItem from './TodoItem'
 import { TODO_STATUS } from './Todos.constants'
 import './Todos.styles.css'
 import TodosConditions from './TodosConditions'
 
-function Todos() {
+const Todos = () => {
   const [todos, setTodos] = useState([])
-  const [editing, setEditing] = useState(null)
   const [status, setStatus] = useState(TODO_STATUS.ALL)
 
-  function handleAdd(text) {
+  const handleAdd = (text) => {
     setTodos([...todos, { id: Date.now(), text }])
   }
 
-  function handleRemove(id) {
+  const handleRemove = (id) => {
     setTodos(todos.filter((todo) => todo.id !== id))
   }
 
-  function handleEdit(todo) {
-    setEditing(todo)
+  const handleEdit = (newTodo) => {
+    setTodos(todos.map((todo) => (todo.id === newTodo.id ? newTodo : todo)))
   }
 
-  function handleSave(todo) {
-    const updatedTodos = todos.map((t) => (t.id === todo.id ? todo : t))
-    setTodos(updatedTodos)
-    setEditing(null)
-  }
+  const ItemsLeftCounter = todos.reduce(
+    (acc, todo) => (!todo.completed ? acc + 1 : acc),
+    0,
+  )
 
-  const handleToggle = (id) => {
-    const updatedTodos = todos.map((todo) => {
-      if (todo.id === id) {
-        return {
-          ...todo,
-          completed: !todo.completed,
-        }
-      }
-      return todo
-    })
-    setTodos(updatedTodos)
+  const CompletedTodos = todos.some((todo) => todo.completed)
+
+  const handleClearedTodos = () => {
+    setTodos(todos.filter((todo) => !todo.completed))
   }
 
   const visibleTodos = todos.filter((todo) => {
-    if (status === TODO_STATUS.ALL) {
-      return true
-    }
     if (status === TODO_STATUS.ACTIVE) {
       return !todo.completed
     }
     if (status === TODO_STATUS.COMPLETED) {
       return todo.completed
     }
+    return true
   })
 
   return (
     <div>
       <h1> ToDo List </h1>
-      <TodosConditions value={status} onChange={setStatus} />
+      <AddTodo onAdd={handleAdd} />
       <ul>
         {visibleTodos.map((todo) => (
           <TodoItem
@@ -65,14 +53,22 @@ function Todos() {
             todo={todo}
             onEdit={handleEdit}
             onRemove={handleRemove}
-            onToggle={handleToggle}
           />
         ))}
       </ul>
-      <AddTodo onAdd={handleAdd} />
-      {editing && (
-        <EditTodo todo={editing} onSave={handleSave} onCancel={handleCancel} />
-      )}
+      <div> {ItemsLeftCounter} Items left </div>
+      <TodosConditions
+        value={status}
+        onChange={setStatus}
+        options={[
+          { name: 'All', value: TODO_STATUS.ALL },
+          { name: 'Active', value: TODO_STATUS.ACTIVE },
+          { name: 'Completed', value: TODO_STATUS.COMPLETED },
+        ]}
+      />
+      {CompletedTodos ? (
+        <button onClick={handleClearedTodos}> Clear Completed </button>
+      ) : null}
     </div>
   )
 }
