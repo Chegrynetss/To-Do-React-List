@@ -1,4 +1,4 @@
-import "./components/Todos/styles/index.css"
+import "./global.css"
 import TodosPage from "./pages/TodosPage";
 
 function App() {

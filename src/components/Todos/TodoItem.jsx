@@ -10,7 +10,7 @@ const TodoItem = ({todo, onToggle, onEdit, onRemove}) => {
   }
 
 return (
-    <li key={todo.id}>
+    <ul key={todo}>
         <input
             type="checkbox"
             checked={todo.completed}
@@ -21,9 +21,9 @@ return (
         >
             {todo.text}
         </span>
-        <button onClick={handleEdit}> Edit </button>
-        <button onClick={handleRemove}> Remove </button>
-    </li>
+        <button className="buttonDelete" onClick={handleRemove}> &#10060; </button>
+        <button className="buttonEdit"onClick={handleEdit}> Edit </button>
+    </ul>
 )
 }
 

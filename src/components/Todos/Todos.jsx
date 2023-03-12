@@ -2,11 +2,14 @@ import { useState } from 'react';
 import AddTodo from "./AddTodo.jsx";
 import EditTodo from "./EditTodo.jsx";
 import TodoItem from "./TodoItem.jsx";
+import {TODO_STATUS} from "./TodoStatus.ts";
+
 function Todos() {
 
     const [todos, setTodos] = useState([]);
     const [editing, setEditing] = useState(null);
-    const [showCompleted, setShowCompleted] = useState(false);
+    const [status, setStatus] = useState(TODO_STATUS.ALL);
+
 
     function handleAdd(text) {
         setTodos([...todos, { id: Date.now(), text }]);
@@ -43,12 +46,12 @@ function Todos() {
         setTodos(updatedTodos);
     };
 
-    const handleShowCompleted = (e) => {
-        setShowCompleted(e.target.value === 'completed');
+    const handleStatusChange = (e) => {
+        setStatus(e.target.value);
     };
 
     const visibleTodos = todos.filter((todo) => {
-        if (showCompleted) {
+        if (status === TODO_STATUS.COMPLETED) {
             return todo.completed;
         } else {
             return !todo.completed;
@@ -59,9 +62,9 @@ return (
     <div>
         <h1> ToDo List </h1>
         <label>
-            <select onChange={handleShowCompleted}>
-                <option value="all"> All Items </option>
-                <option value="completed"> Completed </option>
+            <select onChange={handleStatusChange}>
+                <option value={TODO_STATUS.ALL}> All Items </option>
+                <option value={TODO_STATUS.COMPLETED}> Completed </option>
             </select>
         </label>
         <ul>
