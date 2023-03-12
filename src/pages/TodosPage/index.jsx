@@ -1,9 +1,12 @@
-import Todos from "../../components/Todos";
+import React from 'react'
+import Todos from '../../components/Todos'
 
 const TodosPage = () => {
-    return <div>
-        <Todos />
+  return (
+    <div>
+      <Todos />
     </div>
+  )
 }
 
-export default TodosPage;
+export default TodosPage
