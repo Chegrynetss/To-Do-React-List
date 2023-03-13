@@ -1,0 +1,12 @@
+body {
+  margin: 0 auto;
+  line-height: 1.4em;
+  min-width: 250px;
+  max-width: 250px;
+  font-weight: 300;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
