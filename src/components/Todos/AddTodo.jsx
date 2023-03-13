@@ -15,7 +15,7 @@ function AddTodo({ onAdd }) {
   return (
     <form onSubmit={handleSubmit}>
       <input
-        className="inputForm"
+        className="input__Form"
         type="text"
         placeholder="Add a new Todo"
         value={text}

@@ -1,0 +1,17 @@
+.Footer {
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 15px;
+}
+
+.Footer__filter {
+  color: inherit;
+  padding: 5px 10px;
+  border-radius: 6px;
+  border-color: transparent;
+}
+
+.Footer__filter:hover {
+  border-color: red;
+}

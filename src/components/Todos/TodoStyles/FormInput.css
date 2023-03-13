@@ -1,0 +1,8 @@
+.input__Form {
+  border-radius: 20px;
+  border: 2.5px solid dimgrey;
+  padding: 12px;
+  max-width: 300px;
+  font-size: 16px;
+  cursor: pointer;
+}
