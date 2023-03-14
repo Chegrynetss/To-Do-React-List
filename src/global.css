@@ -4,6 +4,7 @@ body {
   justify-content: center;
   align-items: center;
   font-weight: 300;
+  -webkit-font-smoothing: antialiased;
 }
 
 h1 {

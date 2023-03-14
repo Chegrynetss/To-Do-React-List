@@ -1,8 +1,35 @@
 .App__section {
   width: 600px;
   height: auto;
+  border: 1.5px solid gray;
+  box-shadow: 0px 4px 4px rgba(36, 29, 29, 0.25);
 
-  border: 1px solid black;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.6) 0%,
+    rgba(255, 255, 255, 0.4) 100%
+  );
+  position: relative;
+}
+.App__section::before {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: rgba(70, 59, 59, 0.25);
+  border-radius: 3px;
+}
+.App__section::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
 }
 
 .todo__Section {

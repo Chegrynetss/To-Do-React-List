@@ -5,12 +5,11 @@ import checkIcon from './TodoStyles/Icons/check.png'
 const TodoItem = ({ todo, onEdit, onRemove }) => {
   const [isEditing, setIsEditing] = useState(false)
   const [localText, setLocalText] = useState(todo.text)
-  const [isCompleted, setIsCompleted] = useState(false)
+
   const ref = useRef(null)
 
   const handleComplete = () => {
     onEdit({ ...todo, completed: !todo.completed })
-    setIsCompleted(!isCompleted)
   }
 
   const handleEdit = () => {
@@ -56,7 +55,7 @@ const TodoItem = ({ todo, onEdit, onRemove }) => {
       <div className="Todo__Item">
         <div className="Todo__value">
           <button className="Todo__checkbox" onClick={handleComplete}>
-            {isCompleted ? (
+            {todo.completed ? (
               <img src={checkIcon} className="Todo__checkIcon" />
             ) : null}
           </button>

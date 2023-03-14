@@ -34,13 +34,23 @@ const Todos = () => {
   const CompletedTodos = todos.some((todo) => todo.completed)
 
   const handleCheckAll = () => {
-    setTodos(
-      todos.map((todo) => ({
-        ...todo,
-        completed: !allChecked,
-      })),
-    )
-    setAllChecked(!allChecked)
+    if (!allChecked) {
+      setTodos(
+        todos.map((todo) => ({
+          ...todo,
+          completed: true,
+        })),
+      )
+      setAllChecked(true)
+    } else {
+      setTodos(
+        todos.map((todo) => ({
+          ...todo,
+          completed: !todo.completed,
+        })),
+      )
+      setAllChecked(false)
+    }
   }
 
   const handleClearedTodos = () => {
@@ -62,11 +72,13 @@ const Todos = () => {
       <header className="Header">
         <h1 className="Header__title"> ToDo List </h1>
       </header>
-      <button onClick={handleCheckAll} className="complete__All__Button">
-        <img src={downArrowIcon} width="25px" height="25px" />
-      </button>
       <div className="App__section">
-        <AddTodo onAdd={handleAdd} />
+        <div className="input__Section">
+          <button onClick={handleCheckAll} className="complete__All__Button">
+            <img src={downArrowIcon} width="25px" height="25px" />
+          </button>
+          <AddTodo onAdd={handleAdd} />
+        </div>
         <ul className="todo__Section">
           {visibleTodos.map((todo) => (
             <TodoItem
@@ -79,9 +91,7 @@ const Todos = () => {
           ))}
         </ul>
         <div className="Nav__section">
-          <span className="Footer__counter">
-            {ItemsLeftCounter} Items left{' '}
-          </span>
+          <span className="Footer__counter">{ItemsLeftCounter} Items left</span>
           <TodosConditions
             value={status}
             onChange={setStatus}
