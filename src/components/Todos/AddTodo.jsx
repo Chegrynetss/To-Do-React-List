@@ -13,15 +13,17 @@ function AddTodo({ onAdd }) {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        className="input__Form"
-        type="text"
-        placeholder="Add a new Todo"
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-      />
-    </form>
+    <div className="input__Section">
+      <form onSubmit={handleSubmit} className="input__Form">
+        <input
+          className="input__Input"
+          type="text"
+          placeholder="Add a new Todo"
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+        />
+      </form>
+    </div>
   )
 }
 

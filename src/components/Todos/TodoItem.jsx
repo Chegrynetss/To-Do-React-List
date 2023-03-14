@@ -1,13 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react'
 import './TodoStyles/TodoList.css'
+import checkIcon from './TodoStyles/Icons/check.png'
 
 const TodoItem = ({ todo, onEdit, onRemove }) => {
   const [isEditing, setIsEditing] = useState(false)
   const [localText, setLocalText] = useState(todo.text)
+  const [isCompleted, setIsCompleted] = useState(false)
   const ref = useRef(null)
 
   const handleComplete = () => {
     onEdit({ ...todo, completed: !todo.completed })
+    setIsCompleted(!isCompleted)
   }
 
   const handleEdit = () => {
@@ -49,32 +52,38 @@ const TodoItem = ({ todo, onEdit, onRemove }) => {
   }, [localText, isEditing])
 
   return (
-    <li className="TodoList__item" onDoubleClick={handleEdit}>
+    <li className="TodoList__item">
       <div className="Todo__Item">
-        <input
-          className="round input"
-          type="checkbox"
-          checked={todo.completed}
-          onChange={handleComplete}
-        />
-        <span
-          style={{ textDecoration: todo.completed ? 'line-through' : 'none' }}
-        >
-          {todo.text}
-        </span>
+        <div className="Todo__value">
+          <button className="Todo__checkbox" onClick={handleComplete}>
+            {isCompleted ? (
+              <img src={checkIcon} className="Todo__checkIcon" />
+            ) : null}
+          </button>
+          {isEditing ? (
+            <div>
+              <input
+                ref={ref}
+                onKeyUp={handleMouseUp}
+                onChange={handleChangeLocalText}
+                value={localText}
+              />
+            </div>
+          ) : (
+            <span
+              style={{
+                textDecoration: todo.completed ? 'line-through' : 'none',
+              }}
+              onDoubleClick={handleEdit}
+              className="Todo__span"
+            >
+              {todo.text}
+            </span>
+          )}
+        </div>
         <button className="button__Delete" onClick={handleRemove}>
           &#10060;
         </button>
-        {isEditing ? (
-          <div>
-            <input
-              ref={ref}
-              onKeyUp={handleMouseUp}
-              onChange={handleChangeLocalText}
-              value={localText}
-            />
-          </div>
-        ) : null}
       </div>
     </li>
   )

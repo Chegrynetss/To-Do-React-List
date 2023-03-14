@@ -3,7 +3,7 @@ import './TodoStyles/Footer.css'
 
 const TodosConditions = ({ value, onChange, options }) => {
   return (
-    <div>
+    <div className="Todos__conditions">
       {options.map((option) => (
         <button
           key={option.value}

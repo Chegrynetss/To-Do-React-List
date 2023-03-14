@@ -1,3 +1,11 @@
+.Nav__section {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin: 10px;
+}
+
 .Footer {
   display: inline-flex;
   justify-content: space-between;
@@ -5,13 +13,44 @@
   margin-top: 15px;
 }
 
+.Footer__counter {
+  margin-left: 10px;
+  width: 130px;
+}
+
 .Footer__filter {
   color: inherit;
   padding: 5px 10px;
+  margin: 0 5px;
   border-radius: 6px;
   border-color: transparent;
+  box-sizing: border-box;
 }
 
 .Footer__filter:hover {
   border-color: red;
+}
+
+.Footer__filter__Active {
+  color: rgb(255, 255, 255);
+  padding: 5px 10px;
+  margin: 0 5px;
+  border-radius: 6px;
+  border-color: transparent;
+  box-sizing: border-box;
+  background-color: rgb(0, 0, 0);
+}
+
+.Footer__filter__Active:hover {
+  border-color: red;
+}
+
+.Footer__clear {
+  width: 140px;
+}
+
+.Todos__conditions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
