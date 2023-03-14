@@ -47,21 +47,14 @@ const Todos = () => {
 
   return (
     <div>
-<<<<<<< Updated upstream
-      <h1> ToDo List </h1>
-=======
       <header className="Header">
         <h1 className="Header__title"> ToDo List </h1>
       </header>
->>>>>>> Stashed changes
       <AddTodo onAdd={handleAdd} />
       <ul>
         {visibleTodos.map((todo) => (
           <TodoItem
-<<<<<<< Updated upstream
-=======
             className="TodoList__item"
->>>>>>> Stashed changes
             key={todo.id}
             todo={todo}
             onEdit={handleEdit}
@@ -69,11 +62,7 @@ const Todos = () => {
           />
         ))}
       </ul>
-<<<<<<< Updated upstream
-      <div> {ItemsLeftCounter} Items left </div>
-=======
       <div>{ItemsLeftCounter} Items left </div>
->>>>>>> Stashed changes
       <TodosConditions
         value={status}
         onChange={setStatus}
@@ -84,13 +73,9 @@ const Todos = () => {
         ]}
       />
       {CompletedTodos ? (
-<<<<<<< Updated upstream
-        <button onClick={handleClearedTodos}> Clear Completed </button>
-=======
         <button className="Footer Footer__filter" onClick={handleClearedTodos}>
           Clear Completed
         </button>
->>>>>>> Stashed changes
       ) : null}
     </div>
   )
