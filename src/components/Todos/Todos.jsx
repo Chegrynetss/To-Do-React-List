@@ -13,9 +13,11 @@ const Todos = () => {
   const [todos, setTodos] = useState([])
   const [status, setStatus] = useState(TODO_STATUS.ALL)
   const [allChecked, setAllChecked] = useState(false)
+  const [formSubmitted, setFormSubmitted] = useState(false)
 
   const handleAdd = (text) => {
     setTodos([...todos, { id: Date.now(), text }])
+    setFormSubmitted(true)
   }
 
   const handleRemove = (id) => {
@@ -79,39 +81,45 @@ const Todos = () => {
           </button>
           <AddTodo onAdd={handleAdd} />
         </div>
-        <ul className="todo__Section">
-          {visibleTodos.map((todo) => (
-            <TodoItem
-              className="TodoList__item"
-              key={todo.id}
-              todo={todo}
-              onEdit={handleEdit}
-              onRemove={handleRemove}
+        {formSubmitted && (
+          <ul className="todo__Section">
+            {visibleTodos.map((todo) => (
+              <TodoItem
+                className="TodoList__item"
+                key={todo.id}
+                todo={todo}
+                onEdit={handleEdit}
+                onRemove={handleRemove}
+              />
+            ))}
+          </ul>
+        )}
+        {formSubmitted && (
+          <div className="Nav__section">
+            <span className="Footer__counter">
+              {ItemsLeftCounter} Items left
+            </span>
+            <TodosConditions
+              value={status}
+              onChange={setStatus}
+              options={[
+                { name: 'All', value: TODO_STATUS.ALL },
+                { name: 'Active', value: TODO_STATUS.ACTIVE },
+                { name: 'Completed', value: TODO_STATUS.COMPLETED },
+              ]}
             />
-          ))}
-        </ul>
-        <div className="Nav__section">
-          <span className="Footer__counter">{ItemsLeftCounter} Items left</span>
-          <TodosConditions
-            value={status}
-            onChange={setStatus}
-            options={[
-              { name: 'All', value: TODO_STATUS.ALL },
-              { name: 'Active', value: TODO_STATUS.ACTIVE },
-              { name: 'Completed', value: TODO_STATUS.COMPLETED },
-            ]}
-          />
-          <div className="Footer__clear">
-            {CompletedTodos ? (
-              <button
-                className="Footer Footer__filter"
-                onClick={handleClearedTodos}
-              >
-                Clear Completed
-              </button>
-            ) : null}
+            <div className="Footer__clear">
+              {CompletedTodos ? (
+                <button
+                  className="Footer Footer__filter"
+                  onClick={handleClearedTodos}
+                >
+                  Clear Completed
+                </button>
+              ) : null}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   )
