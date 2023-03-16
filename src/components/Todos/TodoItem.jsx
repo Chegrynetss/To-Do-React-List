@@ -44,15 +44,19 @@ const TodoItem = ({ todo, onEdit, onRemove }) => {
         handleSaveText()
       }
     }
-    window.document.body.addEventListener('click', handler)
+    document.addEventListener('click', handler)
     return () => {
-      window.document.body.removeEventListener('click', handler)
+      document.removeEventListener('click', handler)
     }
   }, [localText, isEditing])
 
   return (
     <li className="TodoList__item">
-      <div className="Todo__Item">
+      <div
+        className={
+          !isEditing ? 'Todo__Item' : 'Todo__Item' + '  Todo__Item__editing'
+        }
+      >
         <div className="Todo__value">
           <button className="Todo__checkbox" onClick={handleComplete}>
             {todo.completed ? (
@@ -60,29 +64,29 @@ const TodoItem = ({ todo, onEdit, onRemove }) => {
             ) : null}
           </button>
           {isEditing ? (
-            <div>
-              <input
-                ref={ref}
-                onKeyUp={handleMouseUp}
-                onChange={handleChangeLocalText}
-                value={localText}
-              />
-            </div>
+            <input
+              ref={ref}
+              onKeyUp={handleMouseUp}
+              onChange={handleChangeLocalText}
+              value={localText}
+              className="Todo__input"
+            />
           ) : (
             <span
               style={{
                 textDecoration: todo.completed ? 'line-through' : 'none',
               }}
               onDoubleClick={handleEdit}
-              className="Todo__span"
             >
               {todo.text}
             </span>
           )}
         </div>
-        <button className="button__Delete" onClick={handleRemove}>
-          &#10060;
-        </button>
+        {isEditing || (
+          <button className="button__Delete" onClick={handleRemove}>
+            &#10060;
+          </button>
+        )}
       </div>
     </li>
   )

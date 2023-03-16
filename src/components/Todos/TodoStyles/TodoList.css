@@ -1,8 +1,8 @@
 .App__section {
   width: 600px;
   height: auto;
-  border: 1.5px solid gray;
-  box-shadow: 0px 4px 4px rgba(36, 29, 29, 0.25);
+  border: 0.3px solid rgb(154, 152, 152);
+  box-shadow: 0 2px 4px 0 rgb(0 0 0 / 20%), 0 25px 50px 0 rgb(0 0 0 / 10%);
 
   background: linear-gradient(
     180deg,
@@ -10,26 +10,6 @@
     rgba(255, 255, 255, 0.4) 100%
   );
   position: relative;
-}
-.App__section::before {
-  content: '';
-  position: absolute;
-  bottom: -8px;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: rgba(70, 59, 59, 0.25);
-  border-radius: 3px;
-}
-.App__section::after {
-  content: '';
-  position: absolute;
-  bottom: -10px;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: rgba(0, 0, 0, 0.1);
-  border-radius: 3px;
 }
 
 .todo__Section {
@@ -41,26 +21,28 @@
 }
 
 .Todo__checkbox {
-  width: 30px;
-  height: 30px;
+  width: 29px;
+  height: 29px;
+  margin: 0 10px;
   background: none;
-  padding: none;
-  border: 1px solid rgb(0, 0, 0);
+  padding: 0.5px;
+  border: 1px solid rgb(200, 194, 194);
   border-radius: 100px;
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: grab;
 }
 
 .Todo__checkIcon {
   width: 20px;
   height: 20px;
-  margin: none;
+  margin: unset;
 }
 
 .Todo__value {
-  display: flex;
-  flex-direction: row;
+  display: grid;
+  grid-template-columns: 50px 1fr;
   align-items: center;
 }
 
@@ -73,7 +55,6 @@
 .TodoList__item {
   display: flex;
   align-items: center;
-  padding: 15px;
   box-sizing: border-box;
   font-size: 24px;
   border-bottom: 1px solid #ededed;
@@ -86,12 +67,18 @@
 .Todo__Item {
   width: 100%;
   position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr 50px;
   height: 60px;
 }
 
-.Todo__span {
-  margin-left: 10px;
+.Todo__Item__editing {
+  grid-template-columns: 1fr !important;
+}
+
+.Todo__input {
+  width: 98.5%;
+  height: 95%;
+  font-size: 24px;
+  background: none;
 }

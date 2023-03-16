@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import AddTodo from './AddTodo'
 import TodoItem from './TodoItem'
 import { TODO_STATUS } from './Todos.constants'
@@ -15,6 +15,11 @@ const Todos = () => {
   const [allChecked, setAllChecked] = useState(false)
   const [formSubmitted, setFormSubmitted] = useState(false)
 
+  useEffect(() => {
+    const allTodosChecked = todos.every((todo) => todo.completed)
+    setAllChecked(allTodosChecked)
+  }, [todos])
+
   const handleAdd = (text) => {
     setTodos([...todos, { id: Date.now(), text }])
     setFormSubmitted(true)
@@ -28,30 +33,22 @@ const Todos = () => {
     setTodos(todos.map((todo) => (todo.id === newTodo.id ? newTodo : todo)))
   }
 
-  const ItemsLeftCounter = todos.reduce(
+  const completedTodosCount = todos.reduce(
     (acc, todo) => (!todo.completed ? acc + 1 : acc),
     0,
   )
 
-  const CompletedTodos = todos.some((todo) => todo.completed)
+  const todosAreCompleted = todos.some((todo) => todo.completed)
 
   const handleCheckAll = () => {
-    if (!allChecked) {
-      setTodos(
-        todos.map((todo) => ({
-          ...todo,
-          completed: true,
-        })),
+    if (allChecked) {
+      setTodos((prevTodo) =>
+        prevTodo.map((todo) => ({ ...todo, completed: false })),
       )
-      setAllChecked(true)
     } else {
-      setTodos(
-        todos.map((todo) => ({
-          ...todo,
-          completed: !todo.completed,
-        })),
+      setTodos((prevTodo) =>
+        prevTodo.map((todo) => ({ ...todo, completed: true })),
       )
-      setAllChecked(false)
     }
   }
 
@@ -97,7 +94,7 @@ const Todos = () => {
         {formSubmitted && (
           <div className="Nav__section">
             <span className="Footer__counter">
-              {ItemsLeftCounter} Items left
+              {completedTodosCount} Items left
             </span>
             <TodosConditions
               value={status}
@@ -109,7 +106,7 @@ const Todos = () => {
               ]}
             />
             <div className="Footer__clear">
-              {CompletedTodos ? (
+              {todosAreCompleted ? (
                 <button
                   className="Footer Footer__filter"
                   onClick={handleClearedTodos}

@@ -1,19 +1,8 @@
-.button__Edit {
-  border-radius: 20px;
-  color: inherit;
-  border: 2px solid transparent;
-  padding: 0.2em 1em;
-  font-size: 14px;
-  font-family: inherit;
-  cursor: pointer;
-}
-
 .button__Delete {
-  border-radius: 20px;
-  background-color: white;
-  border: 2px solid transparent;
+  border-radius: none;
+  border: none;
   padding: 0.2em 1em;
   font-size: 14px;
-  font-family: inherit;
+  background: none;
   cursor: pointer;
 }
