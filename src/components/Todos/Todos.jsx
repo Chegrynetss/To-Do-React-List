@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import AddTodo from './AddTodo'
-import TodoItem from './TodoItem'
 import { TODO_STATUS } from './Todos.constants'
-import './TodoStyles/Edit.Delete.css'
-import TodosConditions from './TodosConditions'
-import './TodoStyles/Header.css'
-import './TodoStyles/TodoList.css'
-import './TodoStyles/FormInput.css'
-import downArrowIcon from './TodoStyles/Icons/down-arrow.png'
+import AddTodo from './AddTodo/AddTodo'
+import TodoItem from './TodoItem/TodoItem'
+import TodoStatus from './TodoStatus/TodoStatus'
+import downArrowIcon from '../../assets/icons/down-arrow.png'
+import './Todos.styles.css'
 
 const Todos = () => {
   const [todos, setTodos] = useState([])
@@ -71,18 +68,21 @@ const Todos = () => {
       <header className="Header">
         <h1 className="Header__title"> ToDo List </h1>
       </header>
-      <div className="App__section">
-        <div className="input__Section">
-          <button onClick={handleCheckAll} className="complete__All__Button">
+      <div className="Box">
+        <div className="Form">
+          <button
+            onClick={handleCheckAll}
+            className="Form__mark--isAllCompleted "
+          >
             <img src={downArrowIcon} width="25px" height="25px" />
           </button>
           <AddTodo onAdd={handleAdd} />
         </div>
         {formSubmitted && (
-          <ul className="todo__Section">
+          <ul className="Box__section">
             {visibleTodos.map((todo) => (
               <TodoItem
-                className="TodoList__item"
+                className="List__items"
                 key={todo.id}
                 todo={todo}
                 onEdit={handleEdit}
@@ -92,11 +92,11 @@ const Todos = () => {
           </ul>
         )}
         {formSubmitted && (
-          <div className="Nav__section">
-            <span className="Footer__counter">
+          <div className="Footer">
+            <span className="Footer__button--isCounted">
               {completedTodosCount} Items left
             </span>
-            <TodosConditions
+            <TodoStatus
               value={status}
               onChange={setStatus}
               options={[
@@ -105,12 +105,9 @@ const Todos = () => {
                 { name: 'Completed', value: TODO_STATUS.COMPLETED },
               ]}
             />
-            <div className="Footer__clear">
+            <div className="Footer__button--isCleared">
               {todosAreCompleted ? (
-                <button
-                  className="Footer Footer__filter"
-                  onClick={handleClearedTodos}
-                >
+                <button className="Footer__button" onClick={handleClearedTodos}>
                   Clear Completed
                 </button>
               ) : null}

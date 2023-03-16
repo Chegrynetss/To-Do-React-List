@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
-import './TodoStyles/TodoList.css'
-import checkIcon from './TodoStyles/Icons/check.png'
+import './TodoItem.styles.css'
+import checkIcon from '../../../assets/icons/check.png'
 
 const TodoItem = ({ todo, onEdit, onRemove }) => {
   const [isEditing, setIsEditing] = useState(false)
@@ -51,16 +51,12 @@ const TodoItem = ({ todo, onEdit, onRemove }) => {
   }, [localText, isEditing])
 
   return (
-    <li className="TodoList__item">
-      <div
-        className={
-          !isEditing ? 'Todo__Item' : 'Todo__Item' + '  Todo__Item__editing'
-        }
-      >
-        <div className="Todo__value">
-          <button className="Todo__checkbox" onClick={handleComplete}>
+    <li className="List__items">
+      <div className={!isEditing ? 'Item' : 'Item' + '  Item--isEdited'}>
+        <div className="Box__value">
+          <button className="Box__checkbox" onClick={handleComplete}>
             {todo.completed ? (
-              <img src={checkIcon} className="Todo__checkIcon" />
+              <img src={checkIcon} className="Box__icon--isChecked" />
             ) : null}
           </button>
           {isEditing ? (
@@ -69,7 +65,7 @@ const TodoItem = ({ todo, onEdit, onRemove }) => {
               onKeyUp={handleMouseUp}
               onChange={handleChangeLocalText}
               value={localText}
-              className="Todo__input"
+              className="Item__input--isEdited"
             />
           ) : (
             <span
@@ -83,7 +79,7 @@ const TodoItem = ({ todo, onEdit, onRemove }) => {
           )}
         </div>
         {isEditing || (
-          <button className="button__Delete" onClick={handleRemove}>
+          <button className="Item__button-isDeleted" onClick={handleRemove}>
             &#10060;
           </button>
         )}

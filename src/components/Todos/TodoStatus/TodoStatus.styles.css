@@ -1,0 +1,35 @@
+.Footer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin: 10px;
+}
+
+.Footer__button {
+  color: inherit;
+  padding: 5px 10px;
+  margin: 0 5px;
+  border-radius: 6px;
+  border-color: transparent;
+  box-sizing: border-box;
+}
+
+.Footer__button:hover {
+  border-color: red;
+}
+
+.Footer__button--isCounted {
+  margin-left: 10px;
+  width: 130px;
+}
+
+.Footer__button--isCleared {
+  width: 140px;
+}
+
+.Footer__buttons--isDisplayed {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}

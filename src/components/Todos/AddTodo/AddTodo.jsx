@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import './AddTodo.styles.css'
 
 function AddTodo({ onAdd }) {
   const [text, setText] = useState('')
@@ -13,9 +14,9 @@ function AddTodo({ onAdd }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="input__Form">
+    <form onSubmit={handleSubmit} className="Form__shape">
       <input
-        className="input__Input"
+        className="Form__input"
         type="text"
         placeholder="Add a new Todo"
         value={text}
