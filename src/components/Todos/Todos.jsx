@@ -3,7 +3,8 @@ import { TODO_STATUS } from './Todos.constants'
 import AddTodo from './AddTodo/AddTodo'
 import TodoItem from './TodoItem/TodoItem'
 import TodoStatus from './TodoStatus/TodoStatus'
-import downArrowIcon from '../../assets/icons/down-arrow.png'
+import isAllChecked from '../../assets/icons/check-all.svg'
+import isAllCheckedActive from '../../assets/icons/check-allActive.svg'
 import './Todos.styles.css'
 
 const Todos = () => {
@@ -65,21 +66,26 @@ const Todos = () => {
 
   return (
     <div>
-      <header className="Header">
-        <h1 className="Header__title"> ToDo List </h1>
+      <header className="Todos__header">
+        <h1 className="Todos__title "> ToDo List </h1>
       </header>
-      <div className="Box">
-        <div className="Form">
+      <div className="TodoItem__box">
+        <div className="AddTodo__form">
           <button
             onClick={handleCheckAll}
-            className="Form__mark--isAllCompleted "
+            className="AddTodo__mark--isAllCompleted "
           >
-            <img src={downArrowIcon} width="25px" height="25px" />
+            <img
+              src={allChecked ? isAllCheckedActive : isAllChecked}
+              width="25px"
+              height="25px"
+              onClick={() => setAllChecked(!allChecked)}
+            />
           </button>
           <AddTodo onAdd={handleAdd} />
         </div>
         {formSubmitted && (
-          <ul className="Box__section">
+          <ul className="TodoItem__box-section">
             {visibleTodos.map((todo) => (
               <TodoItem
                 className="List__items"
@@ -92,8 +98,8 @@ const Todos = () => {
           </ul>
         )}
         {formSubmitted && (
-          <div className="Footer">
-            <span className="Footer__button--isCounted">
+          <div className="TodoStatus__footer ">
+            <span className="TodoStatus__button--isCounted">
               {completedTodosCount} Items left
             </span>
             <TodoStatus
@@ -105,9 +111,12 @@ const Todos = () => {
                 { name: 'Completed', value: TODO_STATUS.COMPLETED },
               ]}
             />
-            <div className="Footer__button--isCleared">
+            <div className="TodoStatus__button--isCleared">
               {todosAreCompleted ? (
-                <button className="Footer__button" onClick={handleClearedTodos}>
+                <button
+                  className="TodoStatus__button"
+                  onClick={handleClearedTodos}
+                >
                   Clear Completed
                 </button>
               ) : null}

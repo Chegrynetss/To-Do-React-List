@@ -3,11 +3,13 @@ import './TodoStatus.styles.css'
 
 const TodoStatus = ({ value, onChange, options }) => {
   return (
-    <div className="Footer__buttons--isDisplayed">
+    <div className="TodoStatus__buttons--isDisplayed">
       {options.map((option) => (
         <button
           key={option.value}
-          className={`Footer__button ${value === option.value ? 'Active' : ''}`}
+          className={`TodoStatus__button ${
+            value === option.value ? 'Active' : ''
+          }`}
           onClick={() => {
             onChange(option.value)
           }}

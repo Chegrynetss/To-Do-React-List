@@ -1,7 +1,7 @@
-.Box {
+.TodoItem__box {
   width: 600px;
   height: auto;
-  border: 0.3px solid rgb(154, 152, 152);
+  border: 0.3px solid transparent;
   box-shadow: 0 2px 4px 0 rgb(0 0 0 / 20%), 0 25px 50px 0 rgb(0 0 0 / 10%);
 
   background: linear-gradient(
@@ -12,7 +12,7 @@
   position: relative;
 }
 
-.Box__section {
+.TodoItem__box-section {
   width: 600px;
   justify-content: center;
   list-style: none;
@@ -20,7 +20,7 @@
   margin: 0;
 }
 
-.Box__checkbox {
+.TodoItem__checkbox {
   width: 29px;
   height: 29px;
   margin: 0 10px;
@@ -34,60 +34,95 @@
   cursor: grab;
 }
 
-.Box__icon--isChecked {
+.TodoItem__icon--isChecked {
   width: 20px;
   height: 20px;
   margin: unset;
 }
 
-.Box__value {
+.TodoItem__box-value {
   display: grid;
   grid-template-columns: 50px 1fr;
   align-items: center;
 }
 
-.List {
+.TodoItem__list {
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.List__items {
+.TodoItem__list-items {
   display: flex;
   align-items: center;
   box-sizing: border-box;
   font-size: 24px;
-  border-bottom: 1px solid #ededed;
 }
 
-.List__items:last-child {
+.TodoItem__list-items:hover .TodoItem__button-isDeleted {
+  display: inline-block;
+}
+
+.TodoItem__list-items:last-child {
   border-bottom: none;
 }
 
-.Item {
+.TodoItem__item {
   width: 100%;
   position: relative;
   display: grid;
   grid-template-columns: 1fr 50px;
   height: 60px;
+  border-bottom: 1px solid #ededed;
 }
 
-.Item--isEdited {
+.TodoItem__item--isEdited {
   grid-template-columns: 1fr !important;
 }
 
-.Item__input--isEdited {
-  width: 98.5%;
-  height: 95%;
+.TodoItem__input--isEdited {
+  width: 97.5%;
+  height: 82%;
   font-size: 24px;
-  background: none;
+  padding: 6px;
+  border: 1px solid #999;
+  box-shadow: inset 0 -1px 5px 0 rgb(0 0 0 / 20%);
 }
 
-.Item__button-isDeleted {
-  border-radius: none;
+.TodoItem__button-isDeleted {
+  display: none;
+  position: absolute;
+  top: 0;
+  right: 10px;
+  bottom: 0;
+  width: 40px;
+  height: 40px;
+  margin: auto 0;
+  font-size: 40px;
+  color: #cc9a9a;
+  margin-bottom: 11px;
+  transition: color 0.2s ease-out;
   border: none;
-  padding: 0.2em 1em;
-  font-size: 14px;
-  background: none;
-  cursor: pointer;
+  background-color: transparent;
+  padding: 0;
+}
+.TodoItem__button-isDeleted::before,
+.TodoItem__button-isDeleted::after {
+  content: '';
+  position: absolute;
+  height: 20px;
+  width: 1px;
+  background-color: currentColor;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.TodoItem__button-isDeleted::after {
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.TodoItem__button-isDeleted:hover::before,
+.TodoItem__button-isDeleted:hover::after {
+  background-color: #bd4141;
 }

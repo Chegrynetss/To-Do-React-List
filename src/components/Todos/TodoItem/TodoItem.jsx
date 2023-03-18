@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import './TodoItem.styles.css'
-import checkIcon from '../../../assets/icons/check.png'
+import checkItem from '../../../assets/icons/check-item.svg'
 
 const TodoItem = ({ todo, onEdit, onRemove }) => {
   const [isEditing, setIsEditing] = useState(false)
@@ -51,12 +51,18 @@ const TodoItem = ({ todo, onEdit, onRemove }) => {
   }, [localText, isEditing])
 
   return (
-    <li className="List__items">
-      <div className={!isEditing ? 'Item' : 'Item' + '  Item--isEdited'}>
-        <div className="Box__value">
-          <button className="Box__checkbox" onClick={handleComplete}>
+    <li className="TodoItem__list-items">
+      <div
+        className={
+          !isEditing
+            ? 'TodoItem__item'
+            : 'TodoItem__item' + '  TodoItem__item--isEdited'
+        }
+      >
+        <div className="TodoItem__box-value">
+          <button className="TodoItem__checkbox" onClick={handleComplete}>
             {todo.completed ? (
-              <img src={checkIcon} className="Box__icon--isChecked" />
+              <img src={checkItem} className="TodoItem__icon--isChecked" />
             ) : null}
           </button>
           {isEditing ? (
@@ -65,12 +71,13 @@ const TodoItem = ({ todo, onEdit, onRemove }) => {
               onKeyUp={handleMouseUp}
               onChange={handleChangeLocalText}
               value={localText}
-              className="Item__input--isEdited"
+              className="TodoItem__input--isEdited"
             />
           ) : (
             <span
               style={{
                 textDecoration: todo.completed ? 'line-through' : 'none',
+                color: todo.completed ? '#d9d9d9' : 'inherit',
               }}
               onDoubleClick={handleEdit}
             >
@@ -79,9 +86,10 @@ const TodoItem = ({ todo, onEdit, onRemove }) => {
           )}
         </div>
         {isEditing || (
-          <button className="Item__button-isDeleted" onClick={handleRemove}>
-            &#10060;
-          </button>
+          <button
+            className="TodoItem__button-isDeleted"
+            onClick={handleRemove}
+          ></button>
         )}
       </div>
     </li>
