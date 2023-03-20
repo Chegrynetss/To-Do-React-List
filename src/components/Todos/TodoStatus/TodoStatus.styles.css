@@ -1,13 +1,7 @@
-.TodoStatus__footer {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  margin: 10px;
-}
-
 .TodoStatus__button {
-  color: inherit;
+  color: rgb(119, 119, 119);
+  font-family: inherit;
+  font-weight: 400;
   padding: 4px 8px;
   margin: 3px;
   border: 1px solid transparent;
@@ -22,19 +16,4 @@
 
 .TodoStatus__button.Active {
   border-color: rgba(175, 47, 47, 0.2);
-}
-
-.TodoStatus__button--isCounted {
-  margin-left: 10px;
-  width: 130px;
-}
-
-.TodoStatus__button--isCleared {
-  width: 140px;
-}
-
-.TodoStatus__buttons--isDisplayed {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
 }

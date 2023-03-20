@@ -3,7 +3,7 @@ import './TodoStatus.styles.css'
 
 const TodoStatus = ({ value, onChange, options }) => {
   return (
-    <div className="TodoStatus__buttons--isDisplayed">
+    <div className="TodoStatus">
       {options.map((option) => (
         <button
           key={option.value}

@@ -6,8 +6,41 @@
 
 .Todos__title {
   color: rgba(175, 47, 47, 0.15);
-  font-size: 80px;
+  font-size: 100px;
   font-weight: 100;
   width: 100%;
+  margin: 24px;
   text-align: center;
+}
+
+.Todos__footer {
+  display: flex;
+  height: 41px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 15px;
+  box-sizing: border-box;
+}
+
+.Todos__button--count {
+  font-family: inherit;
+  font-weight: 300;
+  color: rgb(119, 119, 119);
+}
+
+.Todos__button--clear {
+  font-family: inherit;
+  font-weight: 300;
+  border: none;
+  background-color: transparent;
+  color: rgb(119, 119, 119);
+}
+
+.Todos__button--clear:hover {
+  text-decoration: underline;
+}
+
+.Todos__button--clear--hidden {
+  opacity: 0;
+  pointer-events: none;
 }

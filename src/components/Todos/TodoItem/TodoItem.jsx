@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import './TodoItem.styles.css'
-import checkItem from '../../../assets/icons/check-item.svg'
+import CheckMark from '../../Icons/CheckMark/CheckMark'
 
 const TodoItem = ({ todo, onEdit, onRemove }) => {
   const [isEditing, setIsEditing] = useState(false)
@@ -28,6 +28,10 @@ const TodoItem = ({ todo, onEdit, onRemove }) => {
   }
 
   const handleSaveText = () => {
+    if (!localText) {
+      onRemove(todo.id)
+      return
+    }
     onEdit({ ...todo, text: localText })
     setIsEditing(false)
   }
@@ -56,14 +60,12 @@ const TodoItem = ({ todo, onEdit, onRemove }) => {
         className={
           !isEditing
             ? 'TodoItem__item'
-            : 'TodoItem__item' + '  TodoItem__item--isEdited'
+            : 'TodoItem__item' + '  TodoItem__item--editing'
         }
       >
         <div className="TodoItem__box-value">
           <button className="TodoItem__checkbox" onClick={handleComplete}>
-            {todo.completed ? (
-              <img src={checkItem} className="TodoItem__icon--isChecked" />
-            ) : null}
+            {todo.completed ? <CheckMark fill="#3cb371" /> : null}
           </button>
           {isEditing ? (
             <input
@@ -71,13 +73,15 @@ const TodoItem = ({ todo, onEdit, onRemove }) => {
               onKeyUp={handleMouseUp}
               onChange={handleChangeLocalText}
               value={localText}
-              className="TodoItem__input--isEdited"
+              className="TodoItem__input--editing TodoItem__item--editing"
+              style={{ outline: 'none' }}
             />
           ) : (
             <span
               style={{
                 textDecoration: todo.completed ? 'line-through' : 'none',
                 color: todo.completed ? '#d9d9d9' : 'inherit',
+                userSelect: 'none',
               }}
               onDoubleClick={handleEdit}
             >
@@ -87,7 +91,7 @@ const TodoItem = ({ todo, onEdit, onRemove }) => {
         </div>
         {isEditing || (
           <button
-            className="TodoItem__button-isDeleted"
+            className="TodoItem__button-deleting"
             onClick={handleRemove}
           ></button>
         )}

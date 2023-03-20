@@ -5,21 +5,6 @@
   justify-content: center;
 }
 
-.AddTodo__mark--isAllCompleted {
-  width: 50px;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  background: rgba(0, 0, 0, 0.003);
-  box-shadow: inset 0 -2px 1px rgb(0 0 0 / 3%);
-  cursor: pointer;
-  position: relative;
-}
-
 .AddTodo__shape {
   width: 550px;
   height: 100%;
@@ -32,16 +17,53 @@
   height: 100%;
   margin: 0;
   border: none;
+  line-height: 1.4em;
   padding: 12px;
-  font-size: 16px;
-  cursor: pointer;
+  padding-left: 30px;
+  font-size: 24px;
+  font-weight: inherit;
   box-sizing: border-box;
-  font: 17px 'Helvetica Neue';
-  background: #fffefe;
+  color: rgb(77, 77, 77);
+  opacity: 0.2;
+  font-family: inherit;
+  font-style: italic;
   background: rgba(0, 0, 0, 0.003);
   box-shadow: inset 0 -2px 1px rgb(0 0 0 / 3%);
 }
 
 .AddTodo__input:focus {
   outline: none;
+}
+
+.AddTodo__input--typing {
+  opacity: 1;
+  font-style: normal;
+}
+
+.AddTodo__all-input--toggle {
+  position: absolute;
+  opacity: 0;
+  left: -12px;
+  top: -8px;
+}
+
+.AddTodo__button--toggle-all {
+  position: relative;
+  height: 0;
+}
+
+.AddTodo__button--toggle-all::before {
+  position: absolute;
+  content: '❯';
+  color: #e6e6e6;
+  font-size: 22px;
+  left: -12px;
+  top: -8px;
+  left: -5px;
+  transform: rotate(90deg);
+  z-index: 1;
+}
+
+.AddTodo__button--toggle-all--active::before {
+  color: #737373;
 }

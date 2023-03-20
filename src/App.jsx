@@ -3,11 +3,7 @@ import './global.css'
 import TodosPage from './pages/TodosPage'
 
 function App() {
-  return (
-    <div>
-      <TodosPage />
-    </div>
-  )
+  return <TodosPage />
 }
 
 export default App

@@ -34,7 +34,7 @@
   cursor: grab;
 }
 
-.TodoItem__icon--isChecked {
+.TodoItem__icon--checked {
   width: 20px;
   height: 20px;
   margin: unset;
@@ -59,7 +59,7 @@
   font-size: 24px;
 }
 
-.TodoItem__list-items:hover .TodoItem__button-isDeleted {
+.TodoItem__list-items:hover .TodoItem__button-deleting {
   display: inline-block;
 }
 
@@ -76,20 +76,22 @@
   border-bottom: 1px solid #ededed;
 }
 
-.TodoItem__item--isEdited {
+.TodoItem__item--editing {
   grid-template-columns: 1fr !important;
 }
 
-.TodoItem__input--isEdited {
+.TodoItem__input--editing {
   width: 97.5%;
   height: 82%;
   font-size: 24px;
   padding: 6px;
   border: 1px solid #999;
   box-shadow: inset 0 -1px 5px 0 rgb(0 0 0 / 20%);
+  font-weight: inherit;
+  font-family: inherit;
 }
 
-.TodoItem__button-isDeleted {
+.TodoItem__button-deleting {
   display: none;
   position: absolute;
   top: 0;
@@ -106,8 +108,8 @@
   background-color: transparent;
   padding: 0;
 }
-.TodoItem__button-isDeleted::before,
-.TodoItem__button-isDeleted::after {
+.TodoItem__button-deleting::before,
+.TodoItem__button-deleting::after {
   content: '';
   position: absolute;
   height: 20px;
@@ -118,11 +120,11 @@
   transform: translate(-50%, -50%) rotate(45deg);
 }
 
-.TodoItem__button-isDeleted::after {
+.TodoItem__button-deleting::after {
   transform: translate(-50%, -50%) rotate(-45deg);
 }
 
-.TodoItem__button-isDeleted:hover::before,
-.TodoItem__button-isDeleted:hover::after {
+.TodoItem__button-deleting:hover::before,
+.TodoItem__button-deleting:hover::after {
   background-color: #bd4141;
 }

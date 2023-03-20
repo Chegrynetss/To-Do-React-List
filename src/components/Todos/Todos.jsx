@@ -3,8 +3,6 @@ import { TODO_STATUS } from './Todos.constants'
 import AddTodo from './AddTodo/AddTodo'
 import TodoItem from './TodoItem/TodoItem'
 import TodoStatus from './TodoStatus/TodoStatus'
-import isAllChecked from '../../assets/icons/check-all.svg'
-import isAllCheckedActive from '../../assets/icons/check-allActive.svg'
 import './Todos.styles.css'
 
 const Todos = () => {
@@ -38,6 +36,12 @@ const Todos = () => {
 
   const todosAreCompleted = todos.some((todo) => todo.completed)
 
+  const todosCheckOption = [
+    { name: 'All', value: TODO_STATUS.ALL },
+    { name: 'Active', value: TODO_STATUS.ACTIVE },
+    { name: 'Completed', value: TODO_STATUS.COMPLETED },
+  ]
+
   const handleCheckAll = () => {
     if (allChecked) {
       setTodos((prevTodo) =>
@@ -67,22 +71,16 @@ const Todos = () => {
   return (
     <div>
       <header className="Todos__header">
-        <h1 className="Todos__title "> ToDo List </h1>
+        <h1 className="Todos__title "> todos </h1>
       </header>
       <div className="TodoItem__box">
         <div className="AddTodo__form">
-          <button
-            onClick={handleCheckAll}
-            className="AddTodo__mark--isAllCompleted "
-          >
-            <img
-              src={allChecked ? isAllCheckedActive : isAllChecked}
-              width="25px"
-              height="25px"
-              onClick={() => setAllChecked(!allChecked)}
-            />
-          </button>
-          <AddTodo onAdd={handleAdd} />
+          <AddTodo
+            onAdd={handleAdd}
+            onToggleActive={todosAreCompleted}
+            onToggleClick={handleCheckAll}
+            showToggle={todos.length}
+          />
         </div>
         {formSubmitted && (
           <ul className="TodoItem__box-section">
@@ -98,29 +96,23 @@ const Todos = () => {
           </ul>
         )}
         {formSubmitted && (
-          <div className="TodoStatus__footer ">
-            <span className="TodoStatus__button--isCounted">
+          <div className="Todos__footer">
+            <span className="Todos__button--count">
               {completedTodosCount} Items left
             </span>
             <TodoStatus
               value={status}
               onChange={setStatus}
-              options={[
-                { name: 'All', value: TODO_STATUS.ALL },
-                { name: 'Active', value: TODO_STATUS.ACTIVE },
-                { name: 'Completed', value: TODO_STATUS.COMPLETED },
-              ]}
+              options={todosCheckOption}
             />
-            <div className="TodoStatus__button--isCleared">
-              {todosAreCompleted ? (
-                <button
-                  className="TodoStatus__button"
-                  onClick={handleClearedTodos}
-                >
-                  Clear Completed
-                </button>
-              ) : null}
-            </div>
+            <button
+              className={`Todos__button--clear ${
+                !todosAreCompleted ? 'Todos__button--clear--hidden' : ''
+              }`}
+              onClick={handleClearedTodos}
+            >
+              Clear Completed
+            </button>
           </div>
         )}
       </div>
