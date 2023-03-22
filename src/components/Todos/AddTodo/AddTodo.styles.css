@@ -47,12 +47,12 @@
   top: -8px;
 }
 
-.AddTodo__button--toggle-all {
+.AddTodo__button-toggle-all {
   position: relative;
   height: 0;
 }
 
-.AddTodo__button--toggle-all::before {
+.AddTodo__button-toggle-all::before {
   position: absolute;
   content: '❯';
   color: #e6e6e6;
@@ -64,6 +64,6 @@
   z-index: 1;
 }
 
-.AddTodo__button--toggle-all--active::before {
+.AddTodo__button-toggle-all--active::before {
   color: #737373;
 }

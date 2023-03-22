@@ -25,8 +25,8 @@ function AddTodo({ onAdd, onToggleClick, onToggleActive, showToggle }) {
           <label
             htmlFor="toggle-id"
             onClick={onToggleClick}
-            className={`AddTodo__button--toggle-all ${
-              onToggleActive ? 'AddTodo__button--toggle-all--active' : ''
+            className={`AddTodo__button-toggle-all ${
+              onToggleActive ? 'AddTodo__button-toggle-all--active' : ''
             }`}
           />
         </>
