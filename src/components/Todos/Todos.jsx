@@ -4,12 +4,31 @@ import AddTodo from './AddTodo/AddTodo'
 import TodoItem from './TodoItem/TodoItem'
 import TodoStatus from './TodoStatus/TodoStatus'
 import './Todos.styles.css'
+// import { useFetch } from '../../hooks/Todos.hooks'
 
 const Todos = () => {
   const [todos, setTodos] = useState([])
   const [status, setStatus] = useState(TODO_STATUS.ALL)
   const [allChecked, setAllChecked] = useState(false)
   const [formSubmitted, setFormSubmitted] = useState(false)
+  const API_URL =
+    'https://todo-be-koa-git-feat-without-auth-alexeykrishtopa.vercel.app/api/todos'
+  // const { items, loading } = useFetch(API_URL)
+
+  const [items, setItems] = useState([])
+  useEffect(() => {
+    const fetchItems = async () => {
+      try {
+        const response = await fetch(API_URL)
+        const listItems = await response.json()
+        console.log(listItems)
+        setItems(listItems)
+      } catch (err) {
+        console.log(err.stack)
+      }
+    }
+    ;(async () => await fetchItems())()
+  }, [])
 
   useEffect(() => {
     const allTodosChecked = todos.every((todo) => todo.completed)
@@ -95,6 +114,7 @@ const Todos = () => {
             ))}
           </ul>
         )}
+
         {formSubmitted && (
           <div className="Todos__footer">
             <span className="Todos__button--count">
