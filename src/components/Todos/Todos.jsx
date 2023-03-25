@@ -4,30 +4,24 @@ import AddTodo from './AddTodo/AddTodo'
 import TodoItem from './TodoItem/TodoItem'
 import TodoStatus from './TodoStatus/TodoStatus'
 import './Todos.styles.css'
-// import { useFetch } from '../../hooks/Todos.hooks'
+import { useTodos } from './Todos.hooks'
 
 const Todos = () => {
-  const [todos, setTodos] = useState([])
+  const [, setTodos] = useState([])
   const [status, setStatus] = useState(TODO_STATUS.ALL)
   const [allChecked, setAllChecked] = useState(false)
-  const [formSubmitted, setFormSubmitted] = useState(false)
-  const API_URL =
-    'https://todo-be-koa-git-feat-without-auth-alexeykrishtopa.vercel.app/api/todos'
-  // const { items, loading } = useFetch(API_URL)
+  const {
+    todos,
+    loading,
+    fetchTodos,
+    createTodo,
+    updateTodo,
+    updateTodosCompleted,
+    // deleteTodo,
+  } = useTodos()
 
-  const [items, setItems] = useState([])
   useEffect(() => {
-    const fetchItems = async () => {
-      try {
-        const response = await fetch(API_URL)
-        const listItems = await response.json()
-        console.log(listItems)
-        setItems(listItems)
-      } catch (err) {
-        console.log(err.stack)
-      }
-    }
-    ;(async () => await fetchItems())()
+    fetchTodos()
   }, [])
 
   useEffect(() => {
@@ -36,16 +30,17 @@ const Todos = () => {
   }, [todos])
 
   const handleAdd = (text) => {
-    setTodos([...todos, { id: Date.now(), text }])
-    setFormSubmitted(true)
+    createTodo({ text })
   }
 
   const handleRemove = (id) => {
+    // deleteTodo(id)
     setTodos(todos.filter((todo) => todo.id !== id))
   }
 
   const handleEdit = (newTodo) => {
-    setTodos(todos.map((todo) => (todo.id === newTodo.id ? newTodo : todo)))
+    updateTodo(newTodo)
+    // setTodos(todos.map((todo) => (todo.id === newTodo.id ? newTodo : todo)))
   }
 
   const completedTodosCount = todos.reduce(
@@ -53,7 +48,10 @@ const Todos = () => {
     0,
   )
 
-  const todosAreCompleted = todos.some((todo) => todo.completed)
+  const todosAreCompleted = (todo) => {
+    updateTodosCompleted(todo)
+  }
+  // todos.some((todo) => todo.completed)
 
   const todosCheckOption = [
     { name: 'All', value: TODO_STATUS.ALL },
@@ -89,6 +87,7 @@ const Todos = () => {
 
   return (
     <div>
+      {loading && 'Loading...'}
       <header className="Todos__header">
         <h1 className="Todos__title "> todos </h1>
       </header>
@@ -101,21 +100,18 @@ const Todos = () => {
             showToggle={todos.length}
           />
         </div>
-        {formSubmitted && (
-          <ul className="TodoItem__box-section">
-            {visibleTodos.map((todo) => (
-              <TodoItem
-                className="List__items"
-                key={todo.id}
-                todo={todo}
-                onEdit={handleEdit}
-                onRemove={handleRemove}
-              />
-            ))}
-          </ul>
-        )}
-
-        {formSubmitted && (
+        <ul className="TodoItem__box-section">
+          {todos.map((todo) => (
+            <TodoItem
+              className="List__items"
+              key={todo.id}
+              todo={todo}
+              onEdit={handleEdit}
+              onRemove={handleRemove}
+            />
+          ))}
+        </ul>
+        {todos.length ? (
           <div className="Todos__footer">
             <span className="Todos__button--count">
               {completedTodosCount} Items left
@@ -134,7 +130,7 @@ const Todos = () => {
               Clear Completed
             </button>
           </div>
-        )}
+        ) : null}
       </div>
     </div>
   )
