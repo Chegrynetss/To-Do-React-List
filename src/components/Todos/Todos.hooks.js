@@ -56,48 +56,51 @@ const useTodos = () => {
     }
   }
 
-  const updateTodosCompleted = async (todo) => {
+  const updateTodosCompletedStatus = async () => {
     try {
-      const response = await fetch(`${config.API_URL}/api/${todo.completed}`, {
+      const allTodosCompleted = !todos.every(({ completed }) => completed)
+      await fetch(`${config.API_URL}/api/updateTodosCompleted`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(mapTodoToApi(todo)),
+        body: JSON.stringify({ completed: allTodosCompleted }),
       })
-      const data = await response.json()
-      setTodos((prev) =>
-        prev.map((todo) =>
-          todo.completed === data.payload.list.isCompleted
-            ? mapTodoFromApi(data.payload.list)
-            : todo,
-        ),
+      setTodos((todos) =>
+        todos.map((todo) => ({ ...todo, completed: allTodosCompleted })),
       )
     } catch (err) {
       console.log(err)
     }
   }
 
-  // const deleteTodo = async (todo) => {
-  //   try {
-  //     const response = await fetch(`${config.API_URL}/api/todos/${todo.id}`, {
-  //       method: 'DELETE',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //     })
-  //     const data = await response.json()
-  //     setTodos((prev) =>
-  //       prev.map((todo) =>
-  //         todo.id !== data.payload.dto._id
-  //           ? mapTodoFromApi(data.payload.dto)
-  //           : todo,
-  //       ),
-  //     )
-  //   } catch (err) {
-  //     console.log(err)
-  //   }
-  // }
+  const deleteTodo = async (id) => {
+    try {
+      await fetch(`${config.API_URL}/api/todos/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      setTodos(todos.filter((todo) => todo.id !== id))
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  const deleteCompletedTodos = async () => {
+    try {
+      await fetch(`${config.API_URL}/api/clearCompletedTodos`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      setTodos((todos) => todos.filter((todo) => !todo.completed))
+    } catch (err) {
+      console.log(err)
+    }
+  }
 
   return {
     todos,
@@ -105,8 +108,9 @@ const useTodos = () => {
     fetchTodos,
     createTodo,
     updateTodo,
-    updateTodosCompleted,
-    // deleteTodo,
+    updateTodosCompletedStatus,
+    deleteTodo,
+    deleteCompletedTodos,
   }
 }
 

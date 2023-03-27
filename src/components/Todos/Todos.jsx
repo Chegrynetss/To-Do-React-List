@@ -7,17 +7,18 @@ import './Todos.styles.css'
 import { useTodos } from './Todos.hooks'
 
 const Todos = () => {
-  const [, setTodos] = useState([])
+  // const [, setTodos] = useState([])
   const [status, setStatus] = useState(TODO_STATUS.ALL)
-  const [allChecked, setAllChecked] = useState(false)
+  const [, setAllChecked] = useState(false)
   const {
     todos,
     loading,
     fetchTodos,
     createTodo,
     updateTodo,
-    updateTodosCompleted,
-    // deleteTodo,
+    updateTodosCompletedStatus,
+    deleteTodo,
+    deleteCompletedTodos,
   } = useTodos()
 
   useEffect(() => {
@@ -34,8 +35,8 @@ const Todos = () => {
   }
 
   const handleRemove = (id) => {
-    // deleteTodo(id)
-    setTodos(todos.filter((todo) => todo.id !== id))
+    deleteTodo(id)
+    // setTodos(todos.filter((todo) => todo.id !== id))
   }
 
   const handleEdit = (newTodo) => {
@@ -48,10 +49,10 @@ const Todos = () => {
     0,
   )
 
-  const todosAreCompleted = (todo) => {
-    updateTodosCompleted(todo)
+  const todosAreCompleted = () => {
+    todos.some((todo) => todo.completed)
   }
-  // todos.some((todo) => todo.completed)
+  // updateTodosCompletedStatus(todo)
 
   const todosCheckOption = [
     { name: 'All', value: TODO_STATUS.ALL },
@@ -60,19 +61,22 @@ const Todos = () => {
   ]
 
   const handleCheckAll = () => {
-    if (allChecked) {
-      setTodos((prevTodo) =>
-        prevTodo.map((todo) => ({ ...todo, completed: false })),
-      )
-    } else {
-      setTodos((prevTodo) =>
-        prevTodo.map((todo) => ({ ...todo, completed: true })),
-      )
-    }
+    updateTodosCompletedStatus()
+    // updateTodosCompletedStatus()
+    // if (allChecked) {
+    //   setTodos((prevTodo) =>
+    //     prevTodo.map((todo) => ({ ...todo, completed: false })),
+    //   )
+    // } else {
+    //   setTodos((prevTodo) =>
+    //     prevTodo.map((todo) => ({ ...todo, completed: true })),
+    //   )
+    // }
   }
 
   const handleClearedTodos = () => {
-    setTodos(todos.filter((todo) => !todo.completed))
+    deleteCompletedTodos()
+    // setTodos(todos.filter((todo) => !todo.completed))
   }
 
   const visibleTodos = todos.filter((todo) => {
@@ -87,6 +91,11 @@ const Todos = () => {
 
   return (
     <div>
+      {loading && (
+        <div className="Todos__title--loading">
+          <p> Loading... </p>
+        </div>
+      )}
       {loading && 'Loading...'}
       <header className="Todos__header">
         <h1 className="Todos__title "> todos </h1>
@@ -101,7 +110,7 @@ const Todos = () => {
           />
         </div>
         <ul className="TodoItem__box-section">
-          {todos.map((todo) => (
+          {visibleTodos.map((todo) => (
             <TodoItem
               className="List__items"
               key={todo.id}
