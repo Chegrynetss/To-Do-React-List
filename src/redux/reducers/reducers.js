@@ -25,20 +25,29 @@ const initialState = {
 const todosReducer = (state = initialState, action) => {
   switch (action.type) {
     case FETCH_TODOS_SUCCESS:
-      return [...action.payload.todos]
+      return { ...state, todos: action.payload.todos }
     case CREATE_TODO_SUCCESS:
-      return [...state, action.payload.todo]
+      return { ...state, todos: [...state.todos, action.payload.todo] }
     case UPDATE_TODO_SUCCESS:
-      return state.map((todo) =>
-        todo.id === action.payload.todo.id ? action.payload.todo : todo,
-      )
+      return {
+        ...state,
+        todos: state.todos.map((todo) =>
+          todo.id === action.payload.todo.id ? action.payload.todo : todo,
+        ),
+      }
     case UPDATE_TODOS_COMPLETED_STATUS_SUCCESS:
-      return state.map((todo) => ({
-        ...todo,
-        completed: action.payload.allTodosCompleted,
-      }))
+      return {
+        ...state,
+        todos: state.todos.map((todo) => ({
+          ...todo,
+          completed: action.payload.completed,
+        })),
+      }
     case DELETE_TODO_SUCCESS:
-      return state.filter((todo) => todo.id !== action.payload.id)
+      return {
+        ...state,
+        todos: state.todos.filter((todo) => todo.id !== action.payload.id),
+      }
     default:
       return state
   }

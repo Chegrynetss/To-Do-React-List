@@ -1,15 +1,19 @@
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { createTodoRequest } from '../../../redux/actions/actions'
 import './AddTodo.styles.css'
 
-function AddTodo({ onAdd, onToggleClick, onToggleActive, showToggle }) {
+function AddTodo({ /*onAdd*/ onToggleClick, onToggleActive, showToggle }) {
   const [text, setText] = useState('')
+  const dispatch = useDispatch()
 
   function handleSubmit(event) {
     event.preventDefault()
     if (!text) {
       return
     }
-    onAdd(text)
+    dispatch(createTodoRequest(text))
+    // onAdd(text)
     setText('')
   }
 

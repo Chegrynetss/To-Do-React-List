@@ -30,7 +30,7 @@ const Todos = () => {
   }, [todos])
 
   const handleAdd = (text) => {
-    dispatch(createTodoRequest({ text }))
+    dispatch(createTodoRequest(text))
   }
 
   const handleEdit = (newTodo) => {

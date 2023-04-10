@@ -1,6 +1,13 @@
-import { call, put } from 'redux-saga/effects'
+import { call, put, select, takeLatest } from 'redux-saga/effects'
 import { config } from '../../config'
 import { mapTodoFromApi, mapTodoToApi } from '../../utils/mapTodosApi'
+import {
+  FETCH_TODOS_REQUEST,
+  CREATE_TODO_REQUEST,
+  UPDATE_TODO_REQUEST,
+  UPDATE_TODOS_COMPLETED_STATUS_REQUEST,
+  DELETE_TODO_REQUEST,
+} from './actionTypes'
 
 export function* fetchTodosSaga() {
   try {
@@ -58,8 +65,9 @@ export function* updateTodoSaga(action) {
 
 export function* updateTodosCompletedStatusSaga() {
   try {
+    const todos = yield select((state) => state.todos.todos)
     const allTodosCompleted = !todos.every(({ completed }) => completed)
-    yield call(fetch, `${config.API_URL}/api/updateTodosCompleted`, {
+    yield call(fetch, `${config.API_URL}/api/todos/completed`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -72,10 +80,7 @@ export function* updateTodosCompletedStatusSaga() {
     })
   } catch (err) {
     console.log(err)
-    yield put({
-      type: 'UPDATE_TODOS_COMPLETED_STATUS_FAILURE',
-      payload: { error: err.message },
-    })
+    yield put({ type: 'UPDATE_TODOS_COMPLETED_STATUS_FAILURE' })
   }
 }
 
@@ -93,4 +98,27 @@ export function* deleteTodoSaga(action) {
     console.log(err)
     yield put({ type: 'DELETE_TODO_FAILURE' })
   }
+}
+
+export function* watchFetchTodos() {
+  yield takeLatest(FETCH_TODOS_REQUEST, fetchTodosSaga)
+}
+
+export function* watchCreateTodo() {
+  yield takeLatest(CREATE_TODO_REQUEST, createTodoSaga)
+}
+
+export function* watchUpdateTodo() {
+  yield takeLatest(UPDATE_TODO_REQUEST, updateTodoSaga)
+}
+
+export function* watchUpdateTodosCompletedStatus() {
+  yield takeLatest(
+    UPDATE_TODOS_COMPLETED_STATUS_REQUEST,
+    updateTodosCompletedStatusSaga,
+  )
+}
+
+export function* watchDeleteTodo() {
+  yield takeLatest(DELETE_TODO_REQUEST, deleteTodoSaga)
 }
