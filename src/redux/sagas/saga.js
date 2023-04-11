@@ -7,7 +7,8 @@ import {
   UPDATE_TODO_REQUEST,
   UPDATE_TODOS_COMPLETED_STATUS_REQUEST,
   DELETE_TODO_REQUEST,
-} from './actionTypes'
+  DELETE_TODOS_COMPLETED_REQUEST,
+} from '../actions/actionTypes'
 
 export function* fetchTodosSaga() {
   try {
@@ -65,7 +66,8 @@ export function* updateTodoSaga(action) {
 
 export function* updateTodosCompletedStatusSaga() {
   try {
-    const todos = yield select((state) => state.todos.todos)
+    // const todos = yield select((state) => state.todos.todos)
+    const todos = yield select((state) => state.todos.list)
     const allTodosCompleted = !todos.every(({ completed }) => completed)
     yield call(fetch, `${config.API_URL}/api/todos/completed`, {
       method: 'PUT',
@@ -100,6 +102,28 @@ export function* deleteTodoSaga(action) {
   }
 }
 
+function* deleteTodosCompletedSaga() {
+  try {
+    yield call(fetch, `${config.API_URL}/api/clearCompletedTodos`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    const allTodosCompleted = yield call(fetch, `${config.API_URL}/api/todos`, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    yield put({
+      type: 'DELETE_TODOS_COMPLETED_SUCCESS',
+      payload: { allTodosCompleted },
+    })
+  } catch (error) {
+    yield put({ type: 'DELETE_TODOS_COMPLETED_FAILURE' })
+  }
+}
+
 export function* watchFetchTodos() {
   yield takeLatest(FETCH_TODOS_REQUEST, fetchTodosSaga)
 }
@@ -121,4 +145,8 @@ export function* watchUpdateTodosCompletedStatus() {
 
 export function* watchDeleteTodo() {
   yield takeLatest(DELETE_TODO_REQUEST, deleteTodoSaga)
+}
+
+export function* watchDeleteCompletedTodos() {
+  yield takeLatest(DELETE_TODOS_COMPLETED_REQUEST, deleteTodosCompletedSaga)
 }

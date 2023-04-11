@@ -1,6 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react'
-// import { connect } from 'react-redux'
-// import { updateTodoRequest } from '../../../redux/actions/actions'
 import './TodoItem.styles.css'
 import CheckMark from '../../Icons/CheckMark/CheckMark'
 
@@ -101,15 +99,5 @@ const TodoItem = ({ todo, onEdit, onRemove }) => {
     </li>
   )
 }
-
-// const mapStateToProps = (state) => ({
-//   todos: state.todos,
-// })
-
-// const mapDispatchToProps = (dispatch) => ({
-//   onEdit: (id, updates) => dispatch(updateTodoRequest(id, updates)),
-// })
-
-// export default connect(mapStateToProps, mapDispatchToProps)(TodoItem)
 
 export default TodoItem

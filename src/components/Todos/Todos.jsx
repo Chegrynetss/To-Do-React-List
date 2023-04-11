@@ -6,22 +6,23 @@ import TodoStatus from './TodoStatus/TodoStatus'
 import './Todos.styles.css'
 import { useSelector, useDispatch } from 'react-redux'
 import {
-  fetchTodoRequest,
+  fetchTodosRequest,
   createTodoRequest,
   updateTodoRequest,
   updateTodosCompletedStatusRequest,
   deleteTodoRequest,
+  deleteTodosCompletedRequest,
 } from '../../redux/actions/actions'
 
 const Todos = () => {
   const [status, setStatus] = useState(TODO_STATUS.ALL)
   const [allChecked, setAllChecked] = useState(true)
   const dispatch = useDispatch()
-  const todos = useSelector((state) => state.todos)
-  const loading = useSelector((state) => state.loading)
+  const todos = useSelector((state) => state.todos.list)
+  const loading = useSelector((state) => state.todos.loading)
 
   useEffect(() => {
-    dispatch(fetchTodoRequest())
+    dispatch(fetchTodosRequest())
   }, [])
 
   useEffect(() => {
@@ -52,6 +53,10 @@ const Todos = () => {
         updateTodoRequest(todos.map((todo) => ({ ...todo, completed: true }))),
       )
     }
+  }
+
+  const handleClearedTodos = () => {
+    dispatch(deleteTodosCompletedRequest())
   }
 
   const completedTodosCount = todos.reduce(
@@ -124,7 +129,7 @@ const Todos = () => {
               className={`Todos__button--clear ${
                 !todosAreCompleted ? 'Todos__button--clear--hidden' : ''
               }`}
-              //   onClick={handleClearedTodos}
+              onClick={handleClearedTodos}
             >
               Clear Completed
             </button>

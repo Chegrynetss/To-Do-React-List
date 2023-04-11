@@ -5,6 +5,7 @@ import {
   watchUpdateTodo,
   watchUpdateTodosCompletedStatus,
   watchDeleteTodo,
+  watchDeleteCompletedTodos,
 } from './saga'
 
 export default function* rootSaga() {
@@ -14,5 +15,6 @@ export default function* rootSaga() {
     yield watchUpdateTodo(),
     yield watchUpdateTodosCompletedStatus(),
     yield watchDeleteTodo(),
+    yield watchDeleteCompletedTodos(),
   ])
 }

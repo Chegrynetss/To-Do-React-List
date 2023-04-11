@@ -14,6 +14,9 @@ import {
   DELETE_TODO_REQUEST,
   DELETE_TODO_SUCCESS,
   DELETE_TODO_FAILURE,
+  DELETE_TODOS_COMPLETED_REQUEST,
+  DELETE_TODOS_COMPLETED_SUCCESS,
+  DELETE_TODOS_COMPLETED_FAILURE,
 } from './actionTypes'
 
 export const fetchTodosRequest = () => ({
@@ -86,5 +89,18 @@ export const deleteTodoSuccess = (id) => ({
 
 export const deleteTodoFailure = (error) => ({
   type: DELETE_TODO_FAILURE,
+  payload: { error },
+})
+
+export const deleteTodosCompletedRequest = () => ({
+  type: DELETE_TODOS_COMPLETED_REQUEST,
+})
+
+export const deleteTodosCompletedSuccess = () => ({
+  type: DELETE_TODOS_COMPLETED_SUCCESS,
+})
+
+export const deleteTodosCompletedFailure = (error) => ({
+  type: DELETE_TODOS_COMPLETED_FAILURE,
   payload: { error },
 })
