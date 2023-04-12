@@ -44,3 +44,20 @@
   opacity: 0;
   pointer-events: none;
 }
+
+.Todos__title--loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f1f1f1;
+  height: 100vh;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  font-size: 1.8rem;
+}
+
+.Todos__title--loading p {
+  font-weight: inherit;
+}
