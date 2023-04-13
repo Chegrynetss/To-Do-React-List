@@ -1,18 +1,21 @@
-import React, { useState } from 'react'
-// import { useDispatch } from 'react-redux'
-// import { createTodoRequest } from '../../../redux/actions/actions'
+import React, { useState, FormEvent } from 'react'
 import './AddTodo.styles.css'
 
-function AddTodo({ onAdd, onToggleClick, onToggleActive, showToggle }) {
-  const [text, setText] = useState('')
-  // const dispatch = useDispatch()
+interface Props {
+  onAdd: (text: string) => void
+  onToggleClick: () => void
+  onToggleActive: boolean
+  showToggle: boolean
+}
 
-  function handleSubmit(event) {
+function AddTodo({ onAdd, onToggleClick, onToggleActive, showToggle }: Props) {
+  const [text, setText] = useState('')
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     if (!text) {
       return
     }
-    // dispatch(createTodoRequest(text))
     onAdd(text)
     setText('')
   }

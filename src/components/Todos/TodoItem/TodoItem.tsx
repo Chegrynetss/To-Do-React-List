@@ -2,11 +2,21 @@ import React, { useEffect, useRef, useState } from 'react'
 import './TodoItem.styles.css'
 import CheckMark from '../../Icons/CheckMark/CheckMark'
 
-const TodoItem = ({ todo, onEdit, onRemove }) => {
-  const [isEditing, setIsEditing] = useState(false)
-  const [localText, setLocalText] = useState(todo.text)
+type TodoItemProps = {
+  todo: {
+    id: number
+    text: string
+    completed: boolean
+  }
+  onEdit: (todo: { id: number; text: string; completed: boolean }) => void
+  onRemove: (id: number) => void
+}
 
-  const ref = useRef(null)
+const TodoItem: React.FC<TodoItemProps> = ({ todo, onEdit, onRemove }) => {
+  const [isEditing, setIsEditing] = useState(false)
+  const [localText, setLocalText] = useState<string>(todo.text)
+
+  const ref = useRef<HTMLInputElement>(null)
 
   const handleComplete = () => {
     onEdit({ ...todo, completed: !todo.completed })
@@ -19,7 +29,9 @@ const TodoItem = ({ todo, onEdit, onRemove }) => {
     })
   }
 
-  const handleChangeLocalText = (event) => {
+  const handleChangeLocalText = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     setLocalText(event.target.value)
   }
 
@@ -36,14 +48,14 @@ const TodoItem = ({ todo, onEdit, onRemove }) => {
     setIsEditing(false)
   }
 
-  const handleMouseUp = (event) => {
+  const handleMouseUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       handleSaveText()
     }
   }
 
   useEffect(() => {
-    const handler = (event) => {
+    const handler = (event: MouseEvent) => {
       if (event.target !== ref.current && isEditing) {
         handleSaveText()
       }
