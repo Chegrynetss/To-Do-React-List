@@ -29,3 +29,4 @@ const mapTodoToApi = (todo: Todo): ApiTodo => {
 }
 
 export { mapTodoFromApi, mapTodoToApi }
+export type { Todo }
