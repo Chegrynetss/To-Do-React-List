@@ -18,18 +18,11 @@ import {
   DELETE_TODOS_COMPLETED_SUCCESS,
   DELETE_TODOS_COMPLETED_FAILURE,
 } from './actionTypes'
-
-export interface Todo {
-  id: number
-  text: string
-  completed: boolean
-}
+import { Todo } from 'types'
 
 export interface FetchTodosRequestAction {
   type: typeof FETCH_TODOS_REQUEST
 }
-
-// export interface FetchTodosRequestAction extends Action<typeof FETCH_TODOS_REQUEST> {}
 
 export interface FetchTodosSuccessAction {
   type: typeof FETCH_TODOS_SUCCESS
@@ -58,7 +51,10 @@ export interface CreateTodoFailureAction {
 
 export interface UpdateTodoRequestAction {
   type: typeof UPDATE_TODO_REQUEST
-  payload: { id: number; updates: Partial<Todo> }
+  payload: {
+    todo: Todo
+    onSuccess?: () => void
+  }
 }
 
 export interface UpdateTodoSuccessAction {
@@ -77,7 +73,7 @@ export interface UpdateTodosCompletedStatusRequestAction {
 
 export interface UpdateTodosCompletedStatusSuccessAction {
   type: typeof UPDATE_TODOS_COMPLETED_STATUS_SUCCESS
-  payload: { allTodosCompleted: boolean }
+  payload: { todos: Array<Todo> }
 }
 
 export interface UpdateTodosCompletedStatusFailureAction {
@@ -88,14 +84,14 @@ export interface UpdateTodosCompletedStatusFailureAction {
 export interface DeleteTodoRequestAction {
   type: typeof DELETE_TODO_REQUEST
   payload: {
-    id: number
+    id: string
   }
 }
 
 export interface DeleteTodoSuccessAction {
   type: typeof DELETE_TODO_SUCCESS
   payload: {
-    id: number
+    id: string
   }
 }
 

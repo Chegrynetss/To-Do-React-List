@@ -1,162 +1,160 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects'
-import { config } from '../../config'
-import { mapTodoFromApi, mapTodoToApi } from '../../utils/mapTodosApi'
-import { Response } from 'node-fetch'
+import { mapTodoFromApi, mapTodoToApi } from '../../utils/todosMappers'
 import {
   FETCH_TODOS_REQUEST,
   FETCH_TODOS_SUCCESS,
-  FETCH_TODOS_FAILURE,
   CREATE_TODO_REQUEST,
   CREATE_TODO_SUCCESS,
-  CREATE_TODO_FAILURE,
   UPDATE_TODO_REQUEST,
   UPDATE_TODO_SUCCESS,
-  UPDATE_TODO_FAILURE,
   UPDATE_TODOS_COMPLETED_STATUS_REQUEST,
   UPDATE_TODOS_COMPLETED_STATUS_SUCCESS,
-  UPDATE_TODOS_COMPLETED_STATUS_FAILURE,
   DELETE_TODO_REQUEST,
   DELETE_TODO_SUCCESS,
-  DELETE_TODO_FAILURE,
   DELETE_TODOS_COMPLETED_REQUEST,
   DELETE_TODOS_COMPLETED_SUCCESS,
-  DELETE_TODOS_COMPLETED_FAILURE,
 } from '../actions/actionTypes'
+import { callApi } from '../../utils'
+import { ApiResponse, ApiTodo } from '../../types'
+import { GetAllTodosCompleted } from '../selectors/todos'
 import {
-  Todo,
-  ListAction,
   CreateTodoRequestAction,
   CreateTodoSuccessAction,
-  DeleteTodoFailureAction,
   DeleteTodoRequestAction,
-  DeleteTodosCompletedFailureAction,
-  DeleteTodosCompletedSuccessAction,
   DeleteTodoSuccessAction,
+  FetchTodosSuccessAction,
   UpdateTodoRequestAction,
-  UpdateTodosCompletedStatusFailureAction,
   UpdateTodosCompletedStatusSuccessAction,
   UpdateTodoSuccessAction,
 } from '../actions/actions'
 
-export function* fetchTodosSaga(): Generator {
+export function* fetchTodosSaga() {
   try {
-    const response: Response = yield call(fetch, `${config.API_URL}/api/todos`)
-    const data = yield response.json()
-    const todos: Todo[] = data.payload.list.map(mapTodoFromApi)
-    yield put({ type: FETCH_TODOS_SUCCESS, payload: { todos } })
+    const response: ApiResponse<{ list: Array<ApiTodo> }> = yield call(
+      callApi,
+      `api/todos`,
+    )
+
+    const payload: FetchTodosSuccessAction['payload'] = {
+      todos: response.payload.list.map(mapTodoFromApi),
+    }
+    yield put({
+      type: FETCH_TODOS_SUCCESS,
+      payload: payload,
+    })
   } catch (err) {
-    console.log(err)
-    yield put({ type: FETCH_TODOS_FAILURE })
+    console.log('fetchTodosSaga', err)
   }
 }
 
-export function* createTodoSaga(action: ListAction): Generator {
-  const { text } = (action as CreateTodoRequestAction).payload
+export function* createTodoSaga(action: CreateTodoRequestAction) {
+  const { text } = action.payload
   try {
-    const response: Response = yield call(
-      fetch,
-      `${config.API_URL}/api/todos`,
+    const response: ApiResponse<{ dto: ApiTodo }> = yield call(
+      callApi,
+      `api/todos`,
       {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(mapTodoToApi({ text })),
+        body: JSON.stringify(mapTodoToApi({ type: 'create', text })),
       },
     )
-    const data: any = yield response.json()
-    const todo: Todo = mapTodoFromApi(data.payload.todo)
-    yield put<CreateTodoSuccessAction>({
+    const payload: CreateTodoSuccessAction['payload'] = {
+      todo: mapTodoFromApi(response.payload.dto),
+    }
+    yield put({
       type: CREATE_TODO_SUCCESS,
-      payload: { todo },
+      payload: payload,
     })
   } catch (err) {
-    console.log(err)
-    yield put({ type: CREATE_TODO_FAILURE, payload: { error: err.message } })
+    console.log('createTodoSaga', err)
   }
 }
 
-export function* updateTodoSaga(action: ListAction): Generator {
-  const { id, updates } = (action as UpdateTodoRequestAction).payload
+export function* updateTodoSaga(action: UpdateTodoRequestAction) {
+  const { todo, onSuccess } = action.payload
   try {
-    const response: Response = yield call(
-      fetch,
-      `${config.API_URL}/api/todos/${id}`,
+    const response: ApiResponse<{ dto: ApiTodo }> = yield call(
+      callApi,
+      `api/todos/${todo.id}`,
       {
         method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(mapTodoToApi(updates)),
+        body: JSON.stringify(
+          mapTodoToApi({
+            type: 'update',
+            todo: todo,
+          }),
+        ),
       },
     )
-    const data: any = yield response.json()
-    const todo: Todo = mapTodoFromApi(data.payload.todo)
-    yield put<UpdateTodoSuccessAction>({
+
+    if (onSuccess) {
+      onSuccess()
+    }
+
+    const payload: UpdateTodoSuccessAction['payload'] = {
+      todo: mapTodoFromApi(response.payload.dto),
+    }
+    yield put({
       type: UPDATE_TODO_SUCCESS,
-      payload: { todo },
+      payload: payload,
     })
   } catch (err) {
-    console.log(err)
-    yield put({ type: UPDATE_TODO_FAILURE, payload: { error: err.message } })
+    console.log('updateTodoSaga', err)
   }
 }
 
 export function* updateTodosCompletedStatusSaga() {
   try {
-    const todos: Todo[] = yield select((state) => state.todos)
-    const allTodosCompleted = !todos.every(({ completed }) => completed)
-    yield call(fetch, `${config.API_URL}/api/todos/completed`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
+    const allTodosCompleted: boolean = yield select(GetAllTodosCompleted)
+
+    const response: ApiResponse<{ list: Array<ApiTodo> }> = yield call(
+      callApi,
+      `api/updateTodosCompleted`,
+      {
+        method: 'PUT',
+        body: JSON.stringify({ isCompleted: !allTodosCompleted }),
       },
-      body: JSON.stringify({ completed: allTodosCompleted }),
-    })
-    yield put<UpdateTodosCompletedStatusSuccessAction>({
+    )
+    const payload: UpdateTodosCompletedStatusSuccessAction['payload'] = {
+      todos: response.payload.list.map(mapTodoFromApi),
+    }
+    yield put({
       type: UPDATE_TODOS_COMPLETED_STATUS_SUCCESS,
-      payload: { allTodosCompleted },
+      payload: payload,
     })
   } catch (err) {
-    console.log(err)
-    yield put<UpdateTodosCompletedStatusFailureAction>({
-      type: UPDATE_TODOS_COMPLETED_STATUS_FAILURE,
-      payload: { error: err.message },
-    })
+    console.log('updateTodosCompletedStatusSaga', err)
   }
 }
 
 export function* deleteTodoSaga(action: DeleteTodoRequestAction) {
   const { id } = action.payload
   try {
-    yield call(fetch, `${config.API_URL}/api/todos/${id}`, { method: 'DELETE' })
-    yield put<DeleteTodoSuccessAction>({
+    yield call(callApi, `api/todos/${id}`, {
+      method: 'DELETE',
+    })
+    const payload: DeleteTodoSuccessAction['payload'] = {
+      id,
+    }
+    yield put({
       type: DELETE_TODO_SUCCESS,
-      payload: { id },
+      payload: payload,
     })
   } catch (err) {
-    console.log(err)
-    yield put<DeleteTodoFailureAction>({
-      type: DELETE_TODO_FAILURE,
-      error: err.message,
-    })
+    console.log('deleteTodoSaga', err)
   }
 }
 
 export function* deleteTodosCompletedSaga() {
   try {
-    yield call(fetch, `${config.API_URL}/api/todos/completed`, {
+    yield call(callApi, `api/clearCompletedTodos`, {
       method: 'DELETE',
     })
-    yield put<DeleteTodosCompletedSuccessAction>({
+    yield put({
       type: DELETE_TODOS_COMPLETED_SUCCESS,
     })
   } catch (err) {
-    console.log(err)
-    yield put<DeleteTodosCompletedFailureAction>({
-      type: DELETE_TODOS_COMPLETED_FAILURE,
-      error: err.message,
-    })
+    console.log('deleteTodosCompletedSaga', err)
   }
 }
 

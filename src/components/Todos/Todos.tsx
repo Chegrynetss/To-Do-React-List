@@ -5,24 +5,34 @@ import TodoItem from './TodoItem/TodoItem'
 import TodoStatus from './TodoStatus/TodoStatus'
 import './Todos.styles.css'
 import { useSelector, useDispatch } from 'react-redux'
+import { GetTodosList, GetTodosLoading } from '../../redux/selectors/todos'
 import {
-  fetchTodosRequest,
-  createTodoRequest,
-  updateTodoRequest,
-  updateTodosCompletedStatusRequest,
-  deleteTodoRequest,
-  deleteTodosCompletedRequest,
+  CreateTodoRequestAction,
+  DeleteTodoRequestAction,
+  DeleteTodosCompletedRequestAction,
+  FetchTodosRequestAction,
+  UpdateTodoRequestAction,
+  UpdateTodosCompletedStatusRequestAction,
 } from '../../redux/actions/actions'
+import { Todo } from 'types'
 
 const Todos = () => {
   const [status, setStatus] = useState(TODO_STATUS.ALL)
+
   const [allChecked, setAllChecked] = useState(true)
+
   const dispatch = useDispatch()
-  const todos = useSelector((state) => state.todos.list)
-  const loading = useSelector((state) => state.todos.loading)
+
+  const todos = useSelector(GetTodosList)
+
+  const loading = useSelector(GetTodosLoading)
 
   useEffect(() => {
-    dispatch(fetchTodosRequest())
+    const action: FetchTodosRequestAction = {
+      type: 'FETCH_TODOS_REQUEST',
+    }
+
+    dispatch(action)
   }, [])
 
   useEffect(() => {
@@ -30,33 +40,54 @@ const Todos = () => {
     setAllChecked(allTodosChecked)
   }, [todos])
 
-  const handleAdd = (text) => {
-    dispatch(createTodoRequest(text))
+  const handleAdd = (text: string) => {
+    const action: CreateTodoRequestAction = {
+      type: 'CREATE_TODO_REQUEST',
+      payload: {
+        text,
+      },
+    }
+
+    dispatch(action)
   }
 
-  const handleEdit = (newTodo) => {
-    dispatch(updateTodoRequest(newTodo))
+  const handleEdit = (todo: Todo, onEditEnd?: () => void) => {
+    const action: UpdateTodoRequestAction = {
+      type: 'UPDATE_TODO_REQUEST',
+      payload: {
+        todo,
+        onSuccess: onEditEnd,
+      },
+    }
+
+    dispatch(action)
   }
 
-  const handleRemove = (id) => {
-    dispatch(deleteTodoRequest(id))
+  const handleRemove = (id: string) => {
+    const action: DeleteTodoRequestAction = {
+      type: 'DELETE_TODO_REQUEST',
+      payload: {
+        id: id,
+      },
+    }
+
+    dispatch(action)
   }
 
   const handleCheckAll = () => {
-    dispatch(updateTodosCompletedStatusRequest())
-    if (allChecked) {
-      dispatch(
-        updateTodoRequest(todos.map((todo) => ({ ...todo, completed: false }))),
-      )
-    } else {
-      dispatch(
-        updateTodoRequest(todos.map((todo) => ({ ...todo, completed: true }))),
-      )
+    const action: UpdateTodosCompletedStatusRequestAction = {
+      type: 'UPDATE_TODOS_COMPLETED_STATUS_REQUEST',
     }
+
+    dispatch(action)
   }
 
   const handleClearedTodos = () => {
-    dispatch(deleteTodosCompletedRequest())
+    const action: DeleteTodosCompletedRequestAction = {
+      type: 'DELETE_TODOS_COMPLETED_REQUEST',
+    }
+
+    dispatch(action)
   }
 
   const completedTodosCount = todos.reduce(
@@ -99,9 +130,9 @@ const Todos = () => {
         <div className="AddTodo__form">
           <AddTodo
             onAdd={handleAdd}
-            onToggleActive={todosAreCompleted}
+            onToggleActive={Boolean(todosAreCompleted)}
             onToggleClick={handleCheckAll}
-            showToggle={todos.length}
+            showToggle={Boolean(todos.length)}
           />
         </div>
         <ul className="TodoItem__box-section">
@@ -140,59 +171,3 @@ const Todos = () => {
   )
 }
 export default Todos
-
-// const Todos = () => {
-//   const [todos, setTodos] = useState([])
-//   const [status, setStatus] = useState(TODO_STATUS.ALL)
-//   const [, setAllChecked] = useState(false)
-//   const {
-//     todos,
-//     loading,
-//     fetchTodos,
-//     createTodo,
-//     updateTodo,
-//     updateTodosCompletedStatus,
-//     deleteTodo,
-//     deleteCompletedTodos,
-//   } = useTodos()
-
-//   useEffect(() => {
-//     fetchTodos()
-//   }, [])
-
-//   useEffect(() => {
-//     const allTodosChecked = todos.every((todo) => todo.completed)
-//     setAllChecked(allTodosChecked)
-//   }, [todos])
-
-//   const handleAdd = (text) => {
-//     createTodo({ text })
-//   }
-
-// const handleRemove = (id) => {
-//   deleteTodo(id)
-//   // setTodos(todos.filter((todo) => todo.id !== id))
-// }
-
-// const handleEdit = (newTodo) => {
-//   updateTodo(newTodo)
-//   // setTodos(todos.map((todo) => (todo.id === newTodo.id ? newTodo : todo)))
-// }
-// const handleCheckAll = () => {
-//   updateTodosCompletedStatus()
-//   // updateTodosCompletedStatus()
-//   // if (allChecked) {
-//   //   setTodos((prevTodo) =>
-//   //     prevTodo.map((todo) => ({ ...todo, completed: false })),
-//   //   )
-//   // } else {
-//   //   setTodos((prevTodo) =>
-//   //     prevTodo.map((todo) => ({ ...todo, completed: true })),
-//   //   )
-//   // }
-// }
-
-// const handleClearedTodos = () => {
-//   deleteCompletedTodos()
-//   // setTodos(todos.filter((todo) => !todo.completed))
-// }

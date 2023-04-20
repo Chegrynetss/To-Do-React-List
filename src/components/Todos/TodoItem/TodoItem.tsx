@@ -1,19 +1,23 @@
 import React, { useEffect, useRef, useState } from 'react'
 import './TodoItem.styles.css'
 import CheckMark from '../../Icons/CheckMark/CheckMark'
+import { Todo } from 'types'
 
 type TodoItemProps = {
-  todo: {
-    id: number
-    text: string
-    completed: boolean
-  }
-  onEdit: (todo: { id: number; text: string; completed: boolean }) => void
-  onRemove: (id: number) => void
+  todo: Todo
+  onEdit: (todo: Todo, onEditEnd?: () => void) => void
+  onRemove: (id: string) => void
+  className?: string
 }
 
-const TodoItem: React.FC<TodoItemProps> = ({ todo, onEdit, onRemove }) => {
+const TodoItem: React.FC<TodoItemProps> = ({
+  todo,
+  onEdit,
+  onRemove,
+  className,
+}) => {
   const [isEditing, setIsEditing] = useState(false)
+
   const [localText, setLocalText] = useState<string>(todo.text)
 
   const ref = useRef<HTMLInputElement>(null)
@@ -44,8 +48,9 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo, onEdit, onRemove }) => {
       onRemove(todo.id)
       return
     }
-    onEdit({ ...todo, text: localText })
-    setIsEditing(false)
+    onEdit({ ...todo, text: localText }, () => {
+      setIsEditing(false)
+    })
   }
 
   const handleMouseUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -67,7 +72,7 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo, onEdit, onRemove }) => {
   }, [localText, isEditing])
 
   return (
-    <li className="TodoItem__list-items">
+    <li className={`TodoItem__list-items ${className ? className : ''}`}>
       <div
         className={
           !isEditing
