@@ -1,12 +1,26 @@
 import React, { useEffect, useRef, useState } from 'react'
 import './TodoItem.styles.css'
 import CheckMark from '../../Icons/CheckMark/CheckMark'
+import { Todo } from 'types'
 
-const TodoItem = ({ todo, onEdit, onRemove }) => {
+type TodoItemProps = {
+  todo: Todo
+  onEdit: (todo: Todo, onEditEnd?: () => void) => void
+  onRemove: (id: string) => void
+  className?: string
+}
+
+const TodoItem: React.FC<TodoItemProps> = ({
+  todo,
+  onEdit,
+  onRemove,
+  className,
+}) => {
   const [isEditing, setIsEditing] = useState(false)
-  const [localText, setLocalText] = useState(todo.text)
 
-  const ref = useRef(null)
+  const [localText, setLocalText] = useState<string>(todo.text)
+
+  const ref = useRef<HTMLInputElement>(null)
 
   const handleComplete = () => {
     onEdit({ ...todo, completed: !todo.completed })
@@ -19,7 +33,9 @@ const TodoItem = ({ todo, onEdit, onRemove }) => {
     })
   }
 
-  const handleChangeLocalText = (event) => {
+  const handleChangeLocalText = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     setLocalText(event.target.value)
   }
 
@@ -32,18 +48,19 @@ const TodoItem = ({ todo, onEdit, onRemove }) => {
       onRemove(todo.id)
       return
     }
-    onEdit({ ...todo, text: localText })
-    setIsEditing(false)
+    onEdit({ ...todo, text: localText }, () => {
+      setIsEditing(false)
+    })
   }
 
-  const handleMouseUp = (event) => {
+  const handleMouseUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       handleSaveText()
     }
   }
 
   useEffect(() => {
-    const handler = (event) => {
+    const handler = (event: MouseEvent) => {
       if (event.target !== ref.current && isEditing) {
         handleSaveText()
       }
@@ -55,7 +72,7 @@ const TodoItem = ({ todo, onEdit, onRemove }) => {
   }, [localText, isEditing])
 
   return (
-    <li className="TodoItem__list-items">
+    <li className={`TodoItem__list-items ${className ? className : ''}`}>
       <div
         className={
           !isEditing
