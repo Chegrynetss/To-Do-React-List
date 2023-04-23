@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { TODO_STATUS } from './Todos.constants'
 import AddTodo from './AddTodo/AddTodo'
 import TodoItem from './TodoItem/TodoItem'
+import { useStyles } from './Todos.styles'
 import TodoStatus from './TodoStatus/TodoStatus'
-import './Todos.styles.css'
 import { useSelector, useDispatch } from 'react-redux'
 import { GetTodosList, GetTodosLoading } from '../../redux/selectors/todos'
 import {
@@ -26,6 +26,8 @@ const Todos = () => {
   const todos = useSelector(GetTodosList)
 
   const loading = useSelector(GetTodosLoading)
+
+  const { classes } = useStyles()
 
   useEffect(() => {
     const action: FetchTodosRequestAction = {
@@ -118,16 +120,16 @@ const Todos = () => {
   return (
     <div>
       {loading && (
-        <div className="Todos__title--loading">
+        <div className={classes.titleLoading}>
           <p> Loading... </p>
         </div>
       )}
       {loading && 'Loading...'}
-      <header className="Todos__header">
-        <h1 className="Todos__title "> todos </h1>
+      <header className={classes.header}>
+        <h1 className={classes.title}> todos </h1>
       </header>
-      <div className="TodoItem__box">
-        <div className="AddTodo__form">
+      <div className={classes.box}>
+        <div className={classes.form}>
           <AddTodo
             onAdd={handleAdd}
             onToggleActive={Boolean(todosAreCompleted)}
@@ -135,10 +137,10 @@ const Todos = () => {
             showToggle={Boolean(todos.length)}
           />
         </div>
-        <ul className="TodoItem__box-section">
+        <ul className={classes.boxSection}>
           {visibleTodos.map((todo) => (
             <TodoItem
-              className="List__items"
+              className={classes.listItems}
               key={todo.id}
               todo={todo}
               onEdit={handleEdit}
@@ -147,8 +149,8 @@ const Todos = () => {
           ))}
         </ul>
         {todos.length ? (
-          <div className="Todos__footer">
-            <span className="Todos__button--count">
+          <div className={classes.footer}>
+            <span className={classes.buttonCount}>
               {completedTodosCount} Items left
             </span>
             <TodoStatus
@@ -157,8 +159,8 @@ const Todos = () => {
               options={todosCheckOption}
             />
             <button
-              className={`Todos__button--clear ${
-                !todosAreCompleted ? 'Todos__button--clear--hidden' : ''
+              className={`${classes.buttonClear} ${
+                !todosAreCompleted ? classes.buttonClearHidden : ''
               }`}
               onClick={handleClearedTodos}
             >

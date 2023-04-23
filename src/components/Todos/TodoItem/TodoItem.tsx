@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import './TodoItem.styles.css'
+import { useStyles } from './TodoItem.styles'
 import CheckMark from '../../Icons/CheckMark/CheckMark'
 import { Todo } from 'types'
 
@@ -21,6 +21,8 @@ const TodoItem: React.FC<TodoItemProps> = ({
   const [localText, setLocalText] = useState<string>(todo.text)
 
   const ref = useRef<HTMLInputElement>(null)
+
+  const { classes } = useStyles()
 
   const handleComplete = () => {
     onEdit({ ...todo, completed: !todo.completed })
@@ -72,16 +74,14 @@ const TodoItem: React.FC<TodoItemProps> = ({
   }, [localText, isEditing])
 
   return (
-    <li className={`TodoItem__list-items ${className ? className : ''}`}>
+    <li className={`${classes.listItems} ${className ? className : ''}`}>
       <div
         className={
-          !isEditing
-            ? 'TodoItem__item'
-            : 'TodoItem__item' + '  TodoItem__item--editing'
+          !isEditing ? classes.item : classes.item + ' ' + classes.editing
         }
       >
-        <div className="TodoItem__box-value">
-          <button className="TodoItem__checkbox" onClick={handleComplete}>
+        <div className={classes.boxValue}>
+          <button className={classes.checkbox} onClick={handleComplete}>
             {todo.completed ? <CheckMark fill="#3cb371" /> : null}
           </button>
           {isEditing ? (
@@ -90,16 +90,20 @@ const TodoItem: React.FC<TodoItemProps> = ({
               onKeyUp={handleMouseUp}
               onChange={handleChangeLocalText}
               value={localText}
-              className="TodoItem__input--editing TodoItem__item--editing"
+              className={`${classes.inputEditing} ${classes.editing}`}
               style={{ outline: 'none' }}
             />
           ) : (
             <span
-              style={{
-                textDecoration: todo.completed ? 'line-through' : 'none',
-                color: todo.completed ? '#d9d9d9' : 'inherit',
-                userSelect: 'none',
-              }}
+              className={`${classes.list} 
+              ${classes.todoText} 
+              ${todo.completed ? 'completed' : ''}`}
+              // className={classes.list}
+              // style={{
+              //   textDecoration: todo.completed ? 'line-through' : 'none',
+              //   color: todo.completed ? '#d9d9d9' : 'inherit',
+              //   userSelect: 'none',
+              // }}
               onDoubleClick={handleEdit}
             >
               {todo.text}
@@ -108,7 +112,7 @@ const TodoItem: React.FC<TodoItemProps> = ({
         </div>
         {isEditing || (
           <button
-            className="TodoItem__button-deleting"
+            className={classes.buttonDeleting}
             onClick={handleRemove}
           ></button>
         )}
@@ -116,5 +120,51 @@ const TodoItem: React.FC<TodoItemProps> = ({
     </li>
   )
 }
+
+//   return (
+//     <li className={`TodoItem__list-items ${className ? className : ''}`}>
+//       <div
+//         className={
+//           !isEditing
+//             ? 'TodoItem__item'
+//             : 'TodoItem__item' + '  TodoItem__item--editing'
+//         }
+//       >
+//         <div className="TodoItem__box-value">
+//           <button className="TodoItem__checkbox" onClick={handleComplete}>
+//             {todo.completed ? <CheckMark fill="#3cb371" /> : null}
+//           </button>
+//           {isEditing ? (
+//             <input
+//               ref={ref}
+//               onKeyUp={handleMouseUp}
+//               onChange={handleChangeLocalText}
+//               value={localText}
+//               className="TodoItem__input--editing TodoItem__item--editing"
+//               style={{ outline: 'none' }}
+//             />
+//           ) : (
+//             <span
+//               style={{
+//                 textDecoration: todo.completed ? 'line-through' : 'none',
+//                 color: todo.completed ? '#d9d9d9' : 'inherit',
+//                 userSelect: 'none',
+//               }}
+//               onDoubleClick={handleEdit}
+//             >
+//               {todo.text}
+//             </span>
+//           )}
+//         </div>
+//         {isEditing || (
+//           <button
+//             className="TodoItem__button-deleting"
+//             onClick={handleRemove}
+//           ></button>
+//         )}
+//       </div>
+//     </li>
+//   )
+// }
 
 export default TodoItem

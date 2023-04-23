@@ -1,5 +1,5 @@
 import React from 'react'
-import './TodoStatus.styles.css'
+import { useStyles } from './TodoStatus.styles'
 
 interface TodoStatusProps {
   value: string
@@ -7,18 +7,15 @@ interface TodoStatusProps {
   options: { value: string; name: string }[]
 }
 
-const TodoStatus: React.FC<TodoStatusProps> = ({
-  value,
-  onChange,
-  options,
-}) => {
+const TodoStatus = ({ value, onChange, options }: TodoStatusProps) => {
+  const { classes } = useStyles()
   return (
-    <div className="TodoStatus">
+    <div>
       {options.map((option) => (
         <button
           key={option.value}
-          className={`TodoStatus__button ${
-            value === option.value ? 'Active' : ''
+          className={`${classes.button} ${
+            value === option.value ? '--active' : ''
           }`}
           onClick={() => {
             onChange(option.value)
