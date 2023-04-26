@@ -11,6 +11,9 @@
     "lint": "eslint --quiet"
   },
   "dependencies": {
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
+    "@mui/material": "^5.12.1",
     "@types/node": "^18.15.11",
     "node-fetch": "^3.3.1",
     "react": "^18.2.0",
@@ -20,7 +23,8 @@
     "redux-actions": "^3.0.0",
     "redux-devtools-extension": "^2.13.9",
     "redux-saga": "^1.2.3",
-    "redux-thunk": "^2.4.2"
+    "redux-thunk": "^2.4.2",
+    "tss-react": "^4.8.2"
   },
   "devDependencies": {
     "@types/react": "^18.0.35",

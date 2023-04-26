@@ -1,7 +1,7 @@
 import React, { useState, FormEvent } from 'react'
-import './AddTodo.styles.css'
+import { useStyles } from './AddTodo.styles'
 
-interface Props {
+type Props = {
   onAdd: (text: string) => void
   onToggleClick: () => void
   onToggleActive: boolean
@@ -10,6 +10,8 @@ interface Props {
 
 function AddTodo({ onAdd, onToggleClick, onToggleActive, showToggle }: Props) {
   const [text, setText] = useState('')
+
+  const { classes } = useStyles()
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -21,25 +23,25 @@ function AddTodo({ onAdd, onToggleClick, onToggleActive, showToggle }: Props) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="AddTodo__shape">
+    <form onSubmit={handleSubmit} className={classes.shape}>
       {showToggle ? (
         <>
           <input
             type="button"
             id="toggle-id"
-            className="AddTodo__all-input--toggle"
+            className={classes.allInputToggle}
           />
           <label
             htmlFor="toggle-id"
             onClick={onToggleClick}
-            className={`AddTodo__button-toggle-all ${
-              onToggleActive ? 'AddTodo__button-toggle-all--active' : ''
+            className={`${classes.buttonToggleAll} ${
+              onToggleActive ? `${classes.buttonToggleAll}--active` : ''
             }`}
           />
         </>
       ) : null}
       <input
-        className={`AddTodo__input ${text ? 'AddTodo__input--typing' : ''}`}
+        className={`${classes.input} ${text ? `${classes.input}--typing` : ''}`}
         type="text"
         placeholder="What needs to be done? "
         value={text}
